@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505; /* Near black */
+  --foreground: #f3f4f6; /* Light gray */
+  --neon: #00ffcc; /* Tech cyan neon */
+  --chrome: #1f2937; /* Muted gray for windows */
+  --chrome-border: #374151; /* Border for windows */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-neon: var(--neon);
+  --color-chrome: var(--chrome);
+  --color-chrome-border: var(--chrome-border);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Hide scrollbar universally */
+.no-scrollbar {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari/Opera */
+}
