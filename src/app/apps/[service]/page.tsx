@@ -1,8 +1,9 @@
 import { appsRegistry } from '@/config/apps-registry';
 import { notFound } from 'next/navigation';
 
-export function generateMetadata({ params }: { params: { service: string } }) {
-  const app = appsRegistry.find((a) => a.id === params.service);
+export async function generateMetadata({ params }: { params: Promise<{ service: string }> }) {
+  const resolvedParams = await params;
+  const app = appsRegistry.find((a) => a.id === resolvedParams.service);
   if (!app) return {};
   
   return {
@@ -11,8 +12,9 @@ export function generateMetadata({ params }: { params: { service: string } }) {
   };
 }
 
-export default function AppServicePage({ params }: { params: { service: string } }) {
-  const app = appsRegistry.find((a) => a.id === params.service);
+export default async function AppServicePage({ params }: { params: Promise<{ service: string }> }) {
+  const resolvedParams = await params;
+  const app = appsRegistry.find((a) => a.id === resolvedParams.service);
   
   if (!app) {
     notFound();

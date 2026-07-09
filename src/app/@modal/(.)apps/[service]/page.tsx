@@ -2,8 +2,9 @@ import { appsRegistry } from '@/config/apps-registry';
 import { notFound } from 'next/navigation';
 import { Window } from '@/features/window-manager/Window';
 
-export default function AppServiceModal({ params }: { params: { service: string } }) {
-  const app = appsRegistry.find((a) => a.id === params.service);
+export default async function AppServiceModal({ params }: { params: Promise<{ service: string }> }) {
+  const resolvedParams = await params;
+  const app = appsRegistry.find((a) => a.id === resolvedParams.service);
   
   if (!app) {
     notFound();
