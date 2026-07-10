@@ -9,7 +9,7 @@ import ContactApp from '../apps/contact/ContactApp';
 import ServicesApp from '../apps/services/ServicesApp';
 import HomeApp from '../apps/home/HomeApp';
 import WorkApp from '../apps/work/WorkApp';
-import { ProcessApp } from '../apps/process/ProcessApp';
+import ProcessApp from '../apps/process/ProcessApp';
 import { WindowInstance } from './useWindowStore';
 
 export interface AppRegistryEntry {
@@ -35,7 +35,7 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     defaultHeight: 680,
     defaultX: 100,
     defaultY: 50,
-    minWidth: 400,
+    minWidth: 700,
     minHeight: 500,
     storyMode: true,
     render: (window) => <HomeApp window={window!} />
@@ -47,7 +47,7 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     defaultHeight: 700,
     defaultX: 120,
     defaultY: 60,
-    minWidth: 400,
+    minWidth: 700,
     minHeight: 500,
     storyMode: true,
     render: (window) => <WorkApp window={window!} />
@@ -134,13 +134,13 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
   about: {
     appId: 'about',
     title: 'About',
-    defaultWidth: 480,
-    defaultHeight: 400,
+    defaultWidth: 800,
+    defaultHeight: 560,
     defaultX: 300,
     defaultY: 200,
-    minWidth: 400,
-    minHeight: 300,
-    render: () => <AboutApp />
+    minWidth: 700,
+    minHeight: 400,
+    render: (window) => <AboutApp window={window!} />
   },
   'recycle-bin': {
     appId: 'recycle-bin',
@@ -156,11 +156,11 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
   contact: {
     appId: 'contact',
     title: 'Contact',
-    defaultWidth: 480,
+    defaultWidth: 800,
     defaultHeight: 620,
     defaultX: 250,
     defaultY: 100,
-    minWidth: 400,
+    minWidth: 700,
     minHeight: 500,
     storyMode: true,
     render: (window) => <ContactApp window={window!} />
@@ -172,7 +172,7 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     defaultHeight: 680,
     defaultX: 180,
     defaultY: 80,
-    minWidth: 480,
+    minWidth: 700,
     minHeight: 420,
     storyMode: true,
     render: (window) => <ServicesApp window={window!} />
@@ -184,9 +184,9 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     defaultHeight: 680,
     defaultX: 190,
     defaultY: 90,
-    minWidth: 480,
+    minWidth: 700,
     minHeight: 420,
     storyMode: true,
-    render: (window) => <ProcessApp windowInstance={window!} />
+    render: (window) => <ProcessApp window={window!} />
   }
 };

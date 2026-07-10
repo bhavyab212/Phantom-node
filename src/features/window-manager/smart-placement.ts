@@ -179,9 +179,8 @@ export function calculatePlacement(context: PlacementContext): PlacementResult {
 
   if (strategy !== 'restore' && strategy !== 'snap-zone') {
     if (context.existingWindows.length === 0) {
-      strategy = context.appMetadata?.storyMode ? 'center' : 'best-fit';
-      context.preferredZone = context.preferredZone || 'top-left';
-    } else if (context.existingWindows.length >= 4) {
+      strategy = 'center';
+    } else {
       strategy = 'cascade';
     }
   }
@@ -196,11 +195,7 @@ export function calculatePlacement(context: PlacementContext): PlacementResult {
         overlapArea: calculateTotalOverlap(centerRect, context)
       };
     case 'cascade':
-      return calculateCascade(context);
-    case 'first-fit':
-      return calculateBestFit(context, true);
-    case 'best-fit':
     default:
-      return calculateBestFit(context, false);
+      return calculateCascade(context);
   }
 }

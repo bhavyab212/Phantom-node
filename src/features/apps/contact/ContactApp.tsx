@@ -1,6 +1,4 @@
-'use client';
-
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useContactFormStore } from './useContactFormStore';
 import ContactProgressBar from './components/ContactProgressBar';
@@ -9,10 +7,11 @@ import ContactStepDetails from './components/ContactStepDetails';
 import ContactStepInfo from './components/ContactStepInfo';
 import ContactSuccessState from './components/ContactSuccessState';
 import { useWindowStore, WindowInstance } from '../../window-manager/useWindowStore';
-import { StoryWindowLayout } from '../../story/components/StoryWindowLayout';
+import { NativeAppShell, SidebarGroup, SidebarItem } from '../../ui/NativeAppShell';
+import { Send, CheckCircle2, Circle } from 'lucide-react';
 
 interface ContactAppProps {
-  window?: WindowInstance;
+  window: WindowInstance;
 }
 
 export default function ContactApp({ window: windowInstance }: ContactAppProps) {
@@ -26,11 +25,10 @@ export default function ContactApp({ window: windowInstance }: ContactAppProps) 
     prevStepRef.current = currentStep;
   }, [currentStep]);
 
-  // Read intent from fileContext — this is how Services app hands off pre-fill
+  // Read intent from fileContext
   const fileContextIntent = windowInstance?.fileContext?.initialIntent as string | undefined;
   const prevIntentRef = useRef<string | undefined>(undefined);
 
-  // On mount: reset form, then apply intent if provided
   useEffect(() => {
     resetForm();
     if (fileContextIntent) {
@@ -38,18 +36,14 @@ export default function ContactApp({ window: windowInstance }: ContactAppProps) 
       prevIntentRef.current = fileContextIntent;
     }
     return () => resetForm();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // React to fileContext changes (Services CTA clicked while Contact is already open on step 1)
   useEffect(() => {
     if (fileContextIntent && fileContextIntent !== prevIntentRef.current) {
       prevIntentRef.current = fileContextIntent;
-      // Only update the selection if the user hasn't progressed past step 1
       if (currentStep === 1) {
         setField('intent', fileContextIntent);
       }
-      // If past step 1 — the window store already focused the window; we don't overwrite
     }
   }, [fileContextIntent, currentStep, setField]);
 
@@ -76,61 +70,100 @@ export default function ContactApp({ window: windowInstance }: ContactAppProps) 
     }),
   };
 
-  return (
-    <StoryWindowLayout instanceId={windowInstance?.instanceId}>
-      <div className="flex flex-col w-full h-full min-h-[500px] select-none relative pb-12">
-        {isSubmitted ? (
-          <ContactSuccessState onClose={handleClose} />
-        ) : (
-          <>
-            <ContactProgressBar />
+  const sidebar = (
+    <div className="py-2">
+      <SidebarGroup title="Project Inquiry">
+        <SidebarItem 
+          icon={currentStep > 1 ? CheckCircle2 : Circle} 
+          label="1. Intent" 
+          isActive={currentStep === 1} 
+        />
+        <SidebarItem 
+          icon={currentStep > 2 ? CheckCircle2 : Circle} 
+          label="2. Details" 
+          isActive={currentStep === 2} 
+        />
+        <SidebarItem 
+          icon={isSubmitted ? CheckCircle2 : Circle} 
+          label="3. Contact Info" 
+          isActive={currentStep === 3} 
+        />
+      </SidebarGroup>
+    </div>
+  );
 
-            <div className="flex-1 relative mt-8 overflow-hidden">
-              <AnimatePresence mode="wait" custom={direction}>
-                {currentStep === 1 && (
-                  <motion.div
-                    key="step1"
-                    custom={direction}
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute inset-0"
-                  >
-                    <ContactStepIntent />
-                  </motion.div>
-                )}
-                {currentStep === 2 && (
-                  <motion.div
-                    key="step2"
-                    custom={direction}
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute inset-0"
-                  >
-                    <ContactStepDetails />
-                  </motion.div>
-                )}
-                {currentStep === 3 && (
-                  <motion.div
-                    key="step3"
-                    custom={direction}
-                    variants={variants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute inset-0"
-                  >
-                    <ContactStepInfo />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </>
-        )}
-      </div>
-    </StoryWindowLayout>
+  const toolbar = (
+    <div className="flex items-center gap-2 text-sm font-medium">
+      <span className="text-white/40">Contact</span>
+      <span className="text-white/40">/</span>
+      <span className="text-white/90">
+        Step {currentStep} of 3
+      </span>
+    </div>
+  );
+
+  const content = (
+    <div className="flex flex-col w-full h-full min-h-[500px] select-none relative p-8">
+      {isSubmitted ? (
+        <ContactSuccessState onClose={handleClose} />
+      ) : (
+        <div className="max-w-2xl mx-auto w-full h-full flex flex-col">
+          <ContactProgressBar />
+
+          <div className="flex-1 relative mt-8 overflow-hidden h-full">
+            <AnimatePresence mode="wait" custom={direction}>
+              {currentStep === 1 && (
+                <motion.div
+                  key="step1"
+                  custom={direction}
+                  variants={variants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="absolute inset-0 overflow-y-auto custom-scrollbar"
+                >
+                  <ContactStepIntent />
+                </motion.div>
+              )}
+              {currentStep === 2 && (
+                <motion.div
+                  key="step2"
+                  custom={direction}
+                  variants={variants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="absolute inset-0 overflow-y-auto custom-scrollbar"
+                >
+                  <ContactStepDetails />
+                </motion.div>
+              )}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step3"
+                  custom={direction}
+                  variants={variants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="absolute inset-0 overflow-y-auto custom-scrollbar"
+                >
+                  <ContactStepInfo />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <NativeAppShell 
+      appId={windowInstance.instanceId}
+      sidebar={sidebar}
+      toolbar={toolbar}
+      content={content}
+    />
   );
 }
