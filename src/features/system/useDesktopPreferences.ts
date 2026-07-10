@@ -9,6 +9,8 @@ interface DesktopPreferencesState {
   brightness: number;
   nightLight: boolean;
   desktopZoom: number; // 50–200 (percent)
+  windowPlacementStrategy: 'cascade' | 'center';
+  enableWindowResizing: boolean;
   iconPositions: Record<string, { x: number; y: number }>;
   clipboard: { action: 'cut' | 'copy' | null; appId: string | null };
   setWallpaperId: (id: string) => void;
@@ -18,6 +20,8 @@ interface DesktopPreferencesState {
   setBrightness: (b: number) => void;
   setNightLight: (active: boolean) => void;
   setDesktopZoom: (zoom: number) => void;
+  setWindowPlacementStrategy: (strategy: 'cascade' | 'center') => void;
+  setEnableWindowResizing: (enable: boolean) => void;
   setIconPosition: (appId: string, x: number, y: number) => void;
   setClipboard: (action: 'cut' | 'copy' | null, appId: string | null) => void;
   theme: 'dark' | 'light';
@@ -35,6 +39,8 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
       brightness: 100,
       nightLight: false,
       desktopZoom: 80,
+      windowPlacementStrategy: 'cascade',
+      enableWindowResizing: true,
       iconPositions: {},
       clipboard: { action: null, appId: null },
       theme: 'dark', // default to dark theme for the studio
@@ -86,6 +92,8 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
           document.documentElement.style.setProperty('--desktop-zoom', String(z));
         }
       },
+      setWindowPlacementStrategy: (strategy) => set({ windowPlacementStrategy: strategy }),
+      setEnableWindowResizing: (enable) => set({ enableWindowResizing: enable }),
       setIconPosition: (appId, x, y) =>
         set((state) => ({
           iconPositions: { ...state.iconPositions, [appId]: { x, y } },
@@ -101,7 +109,9 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
           return {
             ...persistedState,
             iconPositions: {},
-            desktopZoom: 80
+            desktopZoom: 80,
+            windowPlacementStrategy: 'cascade',
+            enableWindowResizing: true
           };
         }
         return persistedState;

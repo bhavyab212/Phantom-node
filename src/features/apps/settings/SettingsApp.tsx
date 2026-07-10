@@ -26,10 +26,14 @@ export default function SettingsApp() {
     accentColor, 
     taskbarAutoHide, 
     desktopZoom,
+    windowPlacementStrategy,
+    enableWindowResizing,
     setWallpaperId, 
     setAccentColor, 
     setTaskbarAutoHide,
     setDesktopZoom,
+    setWindowPlacementStrategy,
+    setEnableWindowResizing,
   } = useDesktopPreferences();
   
   const [uptime, setUptime] = useState(0);
@@ -269,6 +273,51 @@ export default function SettingsApp() {
                 >
                   Reset to 100%
                 </button>
+              </div>
+
+              {/* Window Behavior */}
+              <div className="p-6 bg-white/5 border border-white/5 rounded-xl shadow-sm">
+                <h4 className="text-lg font-medium mb-4">Window Behavior</h4>
+                
+                <div className="space-y-6">
+                  {/* Window Placement Strategy */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Window Placement Strategy</div>
+                      <div className="text-sm text-white/50">Choose how new windows are opened on the desktop</div>
+                    </div>
+                    <select
+                      className="bg-black/30 border border-white/10 rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-white/30"
+                      value={windowPlacementStrategy || 'cascade'}
+                      onChange={(e) => setWindowPlacementStrategy(e.target.value as 'cascade' | 'center')}
+                    >
+                      <option value="cascade">Cascade (Staggered)</option>
+                      <option value="center">Center (Always Center)</option>
+                    </select>
+                  </div>
+
+                  {/* Enable Window Resizing */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Enable Window Resizing</div>
+                      <div className="text-sm text-white/50">Allow manually resizing windows by dragging the edges</div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        className="sr-only"
+                        checked={enableWindowResizing ?? true}
+                        onChange={(e) => setEnableWindowResizing(e.target.checked)}
+                      />
+                      <div 
+                        className={`w-11 h-6 bg-white/20 rounded-full transition-colors relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${
+                          (enableWindowResizing ?? true) ? 'after:translate-x-full after:border-white' : ''
+                        }`}
+                        style={(enableWindowResizing ?? true) ? { backgroundColor: 'var(--accent-color)' } : {}}
+                      />
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

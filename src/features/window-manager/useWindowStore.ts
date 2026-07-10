@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { bringToFront, normalizeZIndices } from './z-index-manager';
 import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
+import { useDesktopPreferences } from '../system/useDesktopPreferences';
 
 export interface WindowInstance {
   instanceId: string;
@@ -81,8 +82,24 @@ export const useWindowStore = create<WindowState>()(
             return;
           }
           
-          // Cascade offset
-          const offset = (windows.length % 5) * 30;
+          const width = defaultProps.width || 800;
+          const height = defaultProps.height || 600;
+          
+          const prefs = useDesktopPreferences.getState();
+          let newX = 100;
+          let newY = 100;
+
+          if (prefs.windowPlacementStrategy === 'center') {
+            const screenW = getDesktopWidth();
+            const screenH = getDesktopHeight() - 64; // Account for taskbar
+            newX = Math.max(0, (screenW - width) / 2);
+            newY = Math.max(0, (screenH - height) / 2);
+          } else {
+            // Cascade offset
+            const offset = (windows.length % 5) * 30;
+            newX = 100 + offset;
+            newY = 100 + offset;
+          }
           
           const newWindow: WindowInstance = {
             instanceId: `win-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -93,10 +110,10 @@ export const useWindowStore = create<WindowState>()(
             snapState: 'none',
             isFocused: true,
             zIndex: topZIndex + 1,
-            x: defaultProps.x !== undefined ? defaultProps.x : (100 + offset),
-            y: defaultProps.y !== undefined ? defaultProps.y : (100 + offset),
-            width: defaultProps.width || 800,
-            height: defaultProps.height || 600,
+            x: defaultProps.x !== undefined ? defaultProps.x : newX,
+            y: defaultProps.y !== undefined ? defaultProps.y : newY,
+            width,
+            height,
             fileContext,
             targetContext,
           };

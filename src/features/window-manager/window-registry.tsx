@@ -9,7 +9,7 @@ import ContactApp from '../apps/contact/ContactApp';
 import ServicesApp from '../apps/services/ServicesApp';
 import HomeApp from '../apps/home/HomeApp';
 import WorkApp from '../apps/work/WorkApp';
-import ProcessApp from '../apps/process/ProcessApp';
+import { ProcessApp } from '../apps/process/ProcessApp';
 import { WindowInstance } from './useWindowStore';
 
 export interface AppRegistryEntry {
@@ -187,6 +187,6 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     minWidth: 700,
     minHeight: 420,
     storyMode: true,
-    render: (window) => <ProcessApp window={window!} />
+    render: () => <ProcessApp />
   }
 };

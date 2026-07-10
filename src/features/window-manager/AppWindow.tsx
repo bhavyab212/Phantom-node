@@ -34,6 +34,7 @@ export default function AppWindow({ window }: AppWindowProps) {
   const { showFlyout, hideFlyout, hoveredZoneId, setIsDraggingOverZone } = useSnapZones();
   const settings = useSettingsStore(state => state.settings);
   const desktopZoom = useDesktopPreferences(state => state.desktopZoom) || 100;
+  const enableWindowResizing = useDesktopPreferences(state => state.enableWindowResizing) ?? true;
   const maximizeBtnRef = useRef<HTMLButtonElement>(null);
 
   const appEntry = APP_REGISTRY[window.appId];
@@ -52,7 +53,7 @@ export default function AppWindow({ window }: AppWindowProps) {
       size={{ width: window.width, height: window.height }}
       position={{ x: window.x, y: window.y }}
       disableDragging={window.isMaximized}
-      enableResizing={!window.isMaximized && window.snapState === 'none'}
+      enableResizing={enableWindowResizing && !window.isMaximized && window.snapState === 'none'}
       onDragStart={() => {
         focusWindow(window.instanceId);
         setIsDraggingOverZone(true);
