@@ -4,6 +4,7 @@ import { Rnd } from 'react-rnd';
 import { WidgetLayoutRect } from './widget-types';
 import { useWindowStore } from '../window-manager/useWindowStore';
 import { useWidgetStore } from './useWidgetStore';
+import { useDesktopPreferences } from '../system/useDesktopPreferences';
 import { rectsIntersect } from './layout-utils';
 import { useDesktopComposition } from '../desktop-shell/useDesktopComposition';
 
@@ -22,6 +23,7 @@ export function DesktopWidgetShell({ rect, title, icon, isLive, children, trendN
   const { windows } = useWindowStore();
   const { updateWidgetLayout } = useWidgetStore();
   const { composition } = useDesktopComposition();
+  const desktopZoom = useDesktopPreferences(state => state.desktopZoom) || 100;
 
   useEffect(() => {
     // If user prefers reduced motion, always keep opacity at 1
@@ -61,6 +63,7 @@ export function DesktopWidgetShell({ rect, title, icon, isLive, children, trendN
 
   return (
     <Rnd
+      scale={desktopZoom / 100}
       default={{
         x: rect.x,
         y: rect.y,
@@ -90,6 +93,7 @@ export function DesktopWidgetShell({ rect, title, icon, isLive, children, trendN
       className="absolute z-10 pointer-events-auto"
       minWidth={160}
       minHeight={160}
+      {...({ 'data-dev-target': rect.id } as any)}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}

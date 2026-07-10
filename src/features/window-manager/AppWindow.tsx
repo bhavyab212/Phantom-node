@@ -7,6 +7,8 @@ import { WindowInstance, useWindowStore } from './useWindowStore';
 import { APP_REGISTRY } from './window-registry';
 import { useSnapZones } from './useSnapZones';
 import { SnapLayoutFlyout } from './components/SnapLayoutFlyout';
+import { useDesktopPreferences } from '../system/useDesktopPreferences';
+import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
 import { useSettingsStore } from '../system/useSettingsStore';
 import { useRef } from 'react';
 import { FocusRing } from '../desktop-shell/components/FocusRing';
@@ -31,6 +33,7 @@ export default function AppWindow({ window }: AppWindowProps) {
 
   const { showFlyout, hideFlyout, hoveredZoneId, setIsDraggingOverZone } = useSnapZones();
   const settings = useSettingsStore(state => state.settings);
+  const desktopZoom = useDesktopPreferences(state => state.desktopZoom) || 100;
   const maximizeBtnRef = useRef<HTMLButtonElement>(null);
 
   const appEntry = APP_REGISTRY[window.appId];
@@ -39,6 +42,7 @@ export default function AppWindow({ window }: AppWindowProps) {
 
   return (
     <Rnd
+      scale={desktopZoom / 100}
       default={{
         x: window.x,
         y: window.y,
@@ -47,6 +51,8 @@ export default function AppWindow({ window }: AppWindowProps) {
       }}
       size={{ width: window.width, height: window.height }}
       position={{ x: window.x, y: window.y }}
+      disableDragging={window.isMaximized}
+      enableResizing={!window.isMaximized && window.snapState === 'none'}
       onDragStart={() => {
         focusWindow(window.instanceId);
         setIsDraggingOverZone(true);
@@ -58,8 +64,8 @@ export default function AppWindow({ window }: AppWindowProps) {
       onDragStop={(e, d) => {
         setIsDraggingOverZone(false);
         const taskbarHeight = 64;
-        const screenW = typeof global.window !== 'undefined' ? global.window.innerWidth : 1024;
-        const screenH = typeof global.window !== 'undefined' ? global.window.innerHeight - taskbarHeight : 768;
+        const screenW = getDesktopWidth();
+        const screenH = getDesktopHeight() - taskbarHeight;
         
         // Edge snapping
         if (d.x <= 24) {

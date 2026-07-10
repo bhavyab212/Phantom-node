@@ -80,7 +80,7 @@ export default function DesktopPage() {
   // so we can crossfade them using AnimatePresence.
 
   return (
-    <main className="w-screen h-screen overflow-hidden bg-black relative">
+    <main className="fixed inset-0 overflow-hidden bg-black">
       {/* ── Desktop content (always mounted, hidden behind boot/wake screen) ── */}
       {sequenceDone && isLocked && (
         <LockScreen 

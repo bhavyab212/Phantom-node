@@ -25,9 +25,11 @@ export default function SettingsApp() {
     wallpaperId, 
     accentColor, 
     taskbarAutoHide, 
+    desktopZoom,
     setWallpaperId, 
     setAccentColor, 
-    setTaskbarAutoHide 
+    setTaskbarAutoHide,
+    setDesktopZoom,
   } = useDesktopPreferences();
   
   const [uptime, setUptime] = useState(0);
@@ -219,6 +221,54 @@ export default function SettingsApp() {
                     />
                   </label>
                 </div>
+              </div>
+
+              {/* Display Scale */}
+              <div className="p-6 bg-white/5 border border-white/5 rounded-xl shadow-sm">
+                <h4 className="text-lg font-medium mb-1">Display Scale</h4>
+                <p className="text-sm text-white/50 mb-5">
+                  Adjust how large everything appears on screen. Useful when viewed on different monitor sizes.
+                </p>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setDesktopZoom((desktopZoom ?? 100) - 10)}
+                    disabled={(desktopZoom ?? 100) <= 50}
+                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-lg font-light"
+                    aria-label="Zoom out"
+                  >
+                    −
+                  </button>
+                  <div className="flex-1">
+                    <div className="flex justify-between text-xs text-white/40 mb-1.5">
+                      <span>50%</span>
+                      <span className="font-semibold text-white/90 text-sm">{desktopZoom ?? 100}%</span>
+                      <span>200%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={50}
+                      max={200}
+                      step={10}
+                      value={desktopZoom ?? 100}
+                      onChange={(e) => setDesktopZoom(Number(e.target.value))}
+                      className="w-full accent-[var(--accent-color)] cursor-pointer"
+                    />
+                  </div>
+                  <button
+                    onClick={() => setDesktopZoom((desktopZoom ?? 100) + 10)}
+                    disabled={(desktopZoom ?? 100) >= 200}
+                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-lg font-light"
+                    aria-label="Zoom in"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  onClick={() => setDesktopZoom(100)}
+                  className="mt-3 text-xs font-medium text-white/50 hover:text-white/80 underline underline-offset-2 transition-colors"
+                >
+                  Reset to 100%
+                </button>
               </div>
             </div>
           </div>

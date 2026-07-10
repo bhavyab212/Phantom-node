@@ -5,6 +5,7 @@ import { useDesktopComposition } from './useDesktopComposition';
 import { detectConflicts } from './useConflictDetection';
 import { useWindowStore } from '../window-manager/useWindowStore';
 import { useDesktopPreferences } from '../system/useDesktopPreferences';
+import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
 
 export function DesktopCompositionManager({ children }: { children: React.ReactNode }) {
   const { composition, setConflicts, tidyDesktop } = useDesktopComposition();
@@ -18,7 +19,7 @@ export function DesktopCompositionManager({ children }: { children: React.ReactN
     // Run conflict detection on composition version change
     // Using a microtask or small timeout to debounce
     const timeout = setTimeout(() => {
-      const safeArea = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight - 48 }; // 48 is taskbar height
+      const safeArea = { x: 0, y: 0, width: getDesktopWidth(), height: getDesktopHeight() - 48 }; // 48 is taskbar height
       const newConflicts = detectConflicts(compositionRef.current, safeArea);
       
       // Only update if conflicts changed (simple length check for now, can be deep equal)

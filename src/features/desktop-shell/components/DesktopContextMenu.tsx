@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Sparkles, LayoutGrid, AlignHorizontalDistributeCenter, Home, Folder, Palette, Monitor } from 'lucide-react';
+import { Sparkles, LayoutGrid, AlignHorizontalDistributeCenter, Home, Folder, Palette, Monitor, ChevronRight, RefreshCw } from 'lucide-react';
+import { getDesktopWidth, getDesktopHeight } from '../../../utils/windowUtils';
 import { useWindowStore } from '../../window-manager/useWindowStore';
 import { APP_REGISTRY } from '../../window-manager/window-registry';
 import { useDesktopPreferences } from '../../system/useDesktopPreferences';
@@ -17,7 +18,7 @@ interface DesktopContextMenuProps {
   onRefresh: () => void;
 }
 
-export function DesktopContextMenu({ isOpen, position, onClose }: DesktopContextMenuProps) {
+export function DesktopContextMenu({ isOpen, position, onClose, onRefresh }: DesktopContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const { openApp } = useWindowStore();
   const { tidyDesktop } = useDesktopComposition();
@@ -51,10 +52,10 @@ export function DesktopContextMenu({ isOpen, position, onClose }: DesktopContext
   };
   
   if (typeof window !== 'undefined') {
-    if (position.x + 256 > window.innerWidth) {
+    if (position.x + 256 > getDesktopWidth()) {
       menuStyle.left = position.x - 256;
     }
-    if (position.y + 300 > window.innerHeight) {
+    if (position.y + 300 > getDesktopHeight()) {
       menuStyle.top = position.y - 300;
     }
   }
@@ -70,6 +71,18 @@ export function DesktopContextMenu({ isOpen, position, onClose }: DesktopContext
       role="menu"
       aria-label="Desktop context menu"
     >
+      <button 
+        className="w-full flex items-center gap-3 px-4 py-1.5 text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+        onClick={() => {
+          onRefresh();
+          onClose();
+        }}
+        role="menuitem"
+      >
+        <RefreshCw className="w-4 h-4 text-white/50" />
+        <span>Refresh</span>
+      </button>
+
       <button 
         className="w-full flex items-center gap-3 px-4 py-1.5 text-white/90 hover:text-white hover:bg-white/10 transition-colors"
         onClick={() => {

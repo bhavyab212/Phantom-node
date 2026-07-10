@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { bringToFront, normalizeZIndices } from './z-index-manager';
+import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
 
 export interface WindowInstance {
   instanceId: string;
@@ -240,10 +241,9 @@ export const useWindowStore = create<WindowState>()(
                 } : w)
               };
             } else {
-              // Maximize
               const taskbarHeight = 64;
-              const maxWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-              const maxHeight = typeof window !== 'undefined' ? window.innerHeight - taskbarHeight : 768;
+              const maxWidth = getDesktopWidth();
+              const maxHeight = getDesktopHeight() - taskbarHeight;
 
               return {
                 windows: state.windows.map(w => w.instanceId === instanceId ? {
@@ -270,8 +270,8 @@ export const useWindowStore = create<WindowState>()(
             if (!win || win.isMaximized) return state;
 
             const taskbarHeight = 64;
-            const maxWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-            const maxHeight = typeof window !== 'undefined' ? window.innerHeight - taskbarHeight : 768;
+            const maxWidth = getDesktopWidth();
+            const maxHeight = getDesktopHeight() - taskbarHeight;
 
             return {
               windows: state.windows.map(w => w.instanceId === instanceId ? {
@@ -297,8 +297,8 @@ export const useWindowStore = create<WindowState>()(
             if (!win) return state;
 
             const taskbarHeight = 64;
-            const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-            const screenHeight = typeof window !== 'undefined' ? window.innerHeight - taskbarHeight : 768;
+            const screenWidth = getDesktopWidth();
+            const screenHeight = getDesktopHeight() - taskbarHeight;
             const halfWidth = screenWidth / 2;
             
             return {

@@ -8,6 +8,7 @@ interface DesktopPreferencesState {
   volume: number;
   brightness: number;
   nightLight: boolean;
+  desktopZoom: number; // 50–200 (percent)
   iconPositions: Record<string, { x: number; y: number }>;
   clipboard: { action: 'cut' | 'copy' | null; appId: string | null };
   setWallpaperId: (id: string) => void;
@@ -16,6 +17,7 @@ interface DesktopPreferencesState {
   setVolume: (v: number) => void;
   setBrightness: (b: number) => void;
   setNightLight: (active: boolean) => void;
+  setDesktopZoom: (zoom: number) => void;
   setIconPosition: (appId: string, x: number, y: number) => void;
   setClipboard: (action: 'cut' | 'copy' | null, appId: string | null) => void;
   theme: 'dark' | 'light';
@@ -32,6 +34,7 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
       volume: 75,
       brightness: 100,
       nightLight: false,
+      desktopZoom: 80,
       iconPositions: {},
       clipboard: { action: null, appId: null },
       theme: 'dark', // default to dark theme for the studio
@@ -74,6 +77,15 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
       setVolume: (volume) => set({ volume }),
       setBrightness: (brightness) => set({ brightness }),
       setNightLight: (nightLight) => set({ nightLight }),
+      setDesktopZoom: (desktopZoom) => {
+        const clamped = Math.min(200, Math.max(50, desktopZoom));
+        set({ desktopZoom: clamped });
+        if (typeof document !== 'undefined') {
+          const z = clamped / 100;
+          document.documentElement.style.zoom = String(z);
+          document.documentElement.style.setProperty('--desktop-zoom', String(z));
+        }
+      },
       setIconPosition: (appId, x, y) =>
         set((state) => ({
           iconPositions: { ...state.iconPositions, [appId]: { x, y } },
@@ -82,8 +94,18 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
     }),
     {
       name: 'webos-desktop-preferences',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persistedState: any, version: number) => {
+        if (version < 2) {
+          return {
+            ...persistedState,
+            iconPositions: {},
+            desktopZoom: 80
+          };
+        }
+        return persistedState;
+      },
       onRehydrateStorage: () => (state) => {
         if (state) {
           const accentColor = state.accentColor || '#3b82f6';
@@ -102,6 +124,11 @@ export const useDesktopPreferences = create<DesktopPreferencesState>()(
             } else {
               document.documentElement.classList.remove('dark');
             }
+
+            // Restore zoom level
+            const zoom = state.desktopZoom ?? 80;
+            document.documentElement.style.zoom = String(zoom / 100);
+            document.documentElement.style.setProperty('--desktop-zoom', String(zoom / 100));
           }
         }
       }

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Power, Unlock, Terminal, Layers, Shield, Cpu, Moon, RefreshCcw } from 'lucide-react';
 import PowerMenu from '@/features/power-system/PowerMenu';
+import { useAssetStore } from '../system/useAssetStore';
 
 interface LockScreenProps {
   onUnlock?: () => void;
@@ -25,6 +26,7 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
   const [isInteracting, setIsInteracting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [background, setBackground] = useState<string>('/images/lock_screen_1.jpg');
+  const { lockScreenWallpaperUrl } = useAssetStore();
 
   useEffect(() => {
     setTime(new Date());
@@ -35,6 +37,11 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
   }, []);
 
   useEffect(() => {
+    if (lockScreenWallpaperUrl) {
+      setBackground(lockScreenWallpaperUrl);
+      return;
+    }
+
     fetch('/api/wallpapers')
       .then(res => res.json())
       .then(data => {
@@ -45,7 +52,7 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
         }
       })
       .catch(err => console.error('Failed to fetch lock screens', err));
-  }, []);
+  }, [lockScreenWallpaperUrl]);
 
   const formatTime = (date: Date) => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const formatDate = (date: Date) => date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });

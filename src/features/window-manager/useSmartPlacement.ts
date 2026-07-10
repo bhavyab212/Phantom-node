@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { calculatePlacement } from './smart-placement';
 import { PlacementContext, PlacementStrategy } from './types/smart-placement-types';
 import { APP_REGISTRY } from './window-registry';
+import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
 import { useWindowStore } from './useWindowStore';
 import { useAutoLayout } from '../desktop-widgets/useAutoLayout';
 import { useSettingsStore } from '../system/useSettingsStore';
@@ -29,8 +30,8 @@ export function useSmartPlacement() {
       id: 'screen',
       x: 0,
       y: 0,
-      width: typeof window !== 'undefined' ? window.innerWidth : 1024,
-      height: typeof window !== 'undefined' ? window.innerHeight : 768
+      width: getDesktopWidth(),
+      height: getDesktopHeight()
     };
 
     const taskbarRect = {

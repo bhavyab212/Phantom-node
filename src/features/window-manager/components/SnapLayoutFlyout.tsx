@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useSnapZones } from '../useSnapZones';
 import { SNAP_LAYOUTS, getLayoutsForScreenSize } from '../snap-layouts';
+import { getDesktopWidth } from '../../../utils/windowUtils';
 import { useWindowStore } from '../useWindowStore';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,7 +37,7 @@ export function SnapLayoutFlyout({ windowId, buttonRef }: SnapLayoutFlyoutProps)
 
   if (!isVisible) return null;
 
-  const width = typeof window !== 'undefined' ? window.innerWidth : 1024;
+  const width = getDesktopWidth();
   const availableLayouts = getLayoutsForScreenSize(width);
 
   return (

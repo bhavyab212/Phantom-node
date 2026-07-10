@@ -24,7 +24,9 @@ export const useWidgetStore = create<WidgetStoreState>()(
       resetWidgetLayouts: () => set({ customLayouts: {} }),
     }),
     {
-      name: 'widget-custom-layouts'
+      name: 'widget-custom-layouts',
+      version: 3,
+      migrate: () => ({ customLayouts: {} }), // clear stale positions on version bump
     }
   )
 );

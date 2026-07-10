@@ -4,6 +4,7 @@ import { getDesktopSafeArea, findFreePosition } from './layout-utils';
 import { DEFAULT_WIDGET_DEFINITIONS } from './widget-data';
 import { useWidgetVisibility } from './useWidgetVisibility';
 import { useWidgetStore } from './useWidgetStore';
+import { getDesktopWidth, getDesktopHeight } from '../../utils/windowUtils';
 import { useDesktopComposition } from '../desktop-shell/useDesktopComposition';
 
 const WIDGET_DIMENSIONS: Record<WidgetSize, { width: number; height: number }> = {
@@ -12,6 +13,15 @@ const WIDGET_DIMENSIONS: Record<WidgetSize, { width: number; height: number }> =
   tall: { width: 340, height: 300 },
   large: { width: 440, height: 340 },
   square: { width: 340, height: 340 }
+};
+
+// DEV TOOLS: The dev-tools API writes directly to this object when you click "Hardcode It" on a widget layout.
+const HARDCODED_LAYOUTS: Record<string, Partial<WidgetLayoutRect>> = {
+  // e.g. 'w-system-status': { x: 1204.1375732421875, y: 15.866646766662598, width: 300, height: 328 },
+  'w-notes': { x: 1230.3500366210938, y: 582.9192810058594, width: 264, height: 160 },
+  'w-workspace': { x: 1243.7509765625, y: 11.790000915527344, width: 256, height: 249 },
+  'w-quick-access': { x: 1505.4290673828125, y: 369.90661987304685, width: 319, height: 375 },
+  'w-system-status': { x: 1519.8544921875, y: 14.339713096618652, width: 300, height: 332 },
 };
 
 interface AutoLayoutResult {
@@ -31,15 +41,15 @@ export function useAutoLayout(): AutoLayoutResult {
   const customLayouts = useWidgetStore(state => state.customLayouts);
   
   // Ref to track last screen dimensions to prevent infinite loops
-  const screenRef = useRef({ width: typeof window !== 'undefined' ? window.innerWidth : 1920, height: typeof window !== 'undefined' ? window.innerHeight : 1080 });
+  const screenRef = useRef({ width: getDesktopWidth(), height: getDesktopHeight() });
 
   const computeLayout = useCallback(() => {
     if (typeof window === 'undefined') return;
     
     setIsComputing(true);
     
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = getDesktopWidth();
+    const height = getDesktopHeight();
     screenRef.current = { width, height };
 
     const taskbarHeight = 64; // from Taskbar.tsx
@@ -86,9 +96,9 @@ export function useAutoLayout(): AutoLayoutResult {
 
     for (const widget of customWidgets) {
       const customRect = customLayouts[widget.id];
-      // Clamp custom rect to safe area
-      const clampedX = Math.max(safeArea.x, Math.min(customRect.x, safeArea.x + safeArea.width - customRect.width));
-      const clampedY = Math.max(safeArea.y, Math.min(customRect.y, safeArea.y + safeArea.height - customRect.height));
+      // Clamp custom rect to screen boundaries instead of safe area
+      const clampedX = Math.max(0, Math.min(customRect.x, width - customRect.width));
+      const clampedY = Math.max(0, Math.min(customRect.y, height - customRect.height));
 
       const rect = { ...customRect, x: clampedX, y: clampedY };
       newLayouts[widget.id] = rect;
@@ -102,65 +112,81 @@ export function useAutoLayout(): AutoLayoutResult {
       });
     }
 
-    // 2b. Second pass: Auto layout remaining widgets
+    // ─── Fixed 2×2 Widget Grid (right-anchored) ─────────────────────────
+    // Layout from reference image (proportional):
+    //   [System Status ~380h] [Workspace ~380h]   ← row 1 (same height)
+    //   [Notes         ~200h] [Quick Access ~380h] ← row 2 (notes bottom-aligned with QA)
+    // Each widget ~300px wide, 16px gap, 16px from right screen edge.
+
+    const GRID_GAP = 16;
+    const WIDGET_W = 300;
+    
+    const SYS_H = 380;
+    const WORKSPACE_H = 380;
+    const QA_H = 380;
+    const NOTES_H = 200;
+
+    const gridRightEdge = width - 16; // 16px from right screen edge
+
+    // Column X positions (right-anchored, two columns)
+    const col2X = gridRightEdge - WIDGET_W;              // right column
+    const col1X = col2X - GRID_GAP - WIDGET_W;           // left column
+
+    // Y positions
+    const TOP_MARGIN = safeArea.y + GRID_GAP;
+    
+    const sysY = TOP_MARGIN;
+    const workspaceY = TOP_MARGIN;
+    const qaY = workspaceY + WORKSPACE_H + GRID_GAP;
+    
+    // Notes bottom aligns with Quick Access bottom
+    const qaBottom = qaY + QA_H;
+    const notesY = qaBottom - NOTES_H;
+
     for (const widget of autoWidgets) {
-      const sizeStr = widgetSizes[widget.id] || widget.size;
-      const dims = WIDGET_DIMENSIONS[sizeStr] || WIDGET_DIMENSIONS.small;
-      
-      // We add gap to the target size to ensure padding between widgets
-      const targetSize = {
-        width: dims.width + gap,
-        height: dims.height + gap
-      };
-
-      let pos = { x: 0, y: 0 };
-      let width = dims.width;
-      let height = dims.height;
-
-      // Exact pixel-perfect default layout matching the user's design
-      const row1Y = safeArea.y + 24;
-      const row2Y = row1Y + 220 + gap;
-      const col2X = safeArea.x + safeArea.width - 340; // Right column
-      const col1X_system = col2X - gap - 340;
-      const col1X_notes = col2X - gap - 440;
+      let wx: number, wy: number, ww: number, wh: number;
 
       if (widget.id === 'w-system-status') {
-        width = 340; height = 220;
-        pos.x = col1X_system; pos.y = row1Y;
+        wx = col1X; wy = sysY; ww = WIDGET_W; wh = SYS_H;
       } else if (widget.id === 'w-workspace') {
-        width = 340; height = 220;
-        pos.x = col2X; pos.y = row1Y;
-      } else if (widget.id === 'w-quick-access') {
-        width = 340; height = 380;
-        pos.x = col2X; pos.y = row2Y;
+        wx = col2X; wy = workspaceY; ww = WIDGET_W; wh = WORKSPACE_H;
       } else if (widget.id === 'w-notes') {
-        width = 440; height = 380;
-        pos.x = col1X_notes; pos.y = row2Y;
+        wx = col1X; wy = notesY; ww = WIDGET_W; wh = NOTES_H;
+      } else if (widget.id === 'w-quick-access') {
+        wx = col2X; wy = qaY; ww = WIDGET_W; wh = QA_H;
       } else {
-        pos = findFreePosition(targetSize, placedRects, safeArea, 8, 'right');
+        // fallback for any other widgets
+        const sizeStr = widgetSizes[widget.id] || widget.size;
+        const dims = WIDGET_DIMENSIONS[sizeStr] || WIDGET_DIMENSIONS.small;
+        const freePos = findFreePosition(
+          { width: dims.width + GRID_GAP, height: dims.height + GRID_GAP },
+          placedRects, safeArea, 8, 'right'
+        );
+        wx = freePos.x; wy = freePos.y; ww = dims.width; wh = dims.height;
       }
 
-      // Ensure they don't clip outside safe area
-      pos.x = Math.max(safeArea.x, Math.min(pos.x, safeArea.x + safeArea.width - width));
-      pos.y = Math.max(safeArea.y, Math.min(pos.y, safeArea.y + safeArea.height - height));
+      // Apply DEV TOOLS hardcoded layout if one exists for this widget
+      const override = HARDCODED_LAYOUTS[widget.id];
+      if (override) {
+        if (override.x !== undefined) wx = override.x;
+        if (override.y !== undefined) wy = override.y;
+        if (override.width !== undefined) ww = override.width;
+        if (override.height !== undefined) wh = override.height;
+      } else {
+        // Clamp to screen boundaries (only if not hardcoded)
+        wx = Math.max(16, Math.min(wx, width - 16 - ww));
+        wy = Math.max(safeArea.y, wy);
+      }
 
-      const rect: WidgetLayoutRect = {
-        id: widget.id,
-        x: pos.x,
-        y: pos.y,
-        width: width,
-        height: height
-      };
-
+      const rect: WidgetLayoutRect = { id: widget.id, x: wx, y: wy, width: ww, height: wh };
       newLayouts[widget.id] = rect;
-      
-      // Add the rect + gap to placed rects as an obstacle
+
       placedRects.push({
         id: `obstacle-${widget.id}`,
-        x: pos.x,
-        y: pos.y,
-        width: width + gap,
-        height: height + gap
+        x: wx - GRID_GAP / 2,
+        y: wy - GRID_GAP / 2,
+        width: ww + GRID_GAP,
+        height: wh + GRID_GAP
       });
     }
 
@@ -208,7 +234,7 @@ export function useAutoLayout(): AutoLayoutResult {
       // Debounce resize
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (window.innerWidth !== screenRef.current.width || window.innerHeight !== screenRef.current.height) {
+        if (getDesktopWidth() !== screenRef.current.width || getDesktopHeight() !== screenRef.current.height) {
           computeLayout();
         }
       }, 150);
@@ -228,8 +254,8 @@ export function useAutoLayout(): AutoLayoutResult {
     safeArea: {
       x: 24, // margin
       y: 24, // margin
-      width: typeof window !== 'undefined' ? window.innerWidth - 48 : 1024,
-      height: typeof window !== 'undefined' ? window.innerHeight - 64 - 48 : 768
+      width: getDesktopWidth() - 48,
+      height: getDesktopHeight() - 112 // 64 (taskbar) + 48 (margins)
     },
     isComputing 
   };

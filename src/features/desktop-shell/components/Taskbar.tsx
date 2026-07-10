@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import TaskbarStartButton from './TaskbarStartButton';
 import TaskbarPinnedApps from './TaskbarPinnedApps';
@@ -33,11 +35,11 @@ export default function Taskbar({ isStartOpen, toggleStart }: TaskbarProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Taskbar Container: Windows 11 style, flush to bottom, full width, more translucent */}
+        {/* Taskbar Container */}
         <div 
           className="pointer-events-auto flex items-center justify-between h-16 bg-[#111111]/40 backdrop-blur-3xl border-t border-white/[0.08] w-full shadow-[0_-5px_20px_rgba(0,0,0,0.3)]"
+          {...({ 'data-dev-target': 'taskbar' } as any)}
         >
-          
           {/* Left Side: Search Affordance */}
           <div className="flex-1 hidden md:flex items-center pl-4">
             <button
@@ -64,7 +66,6 @@ export default function Taskbar({ isStartOpen, toggleStart }: TaskbarProps) {
           <div className="flex-1 flex justify-end h-full">
             <SystemTray />
           </div>
-          
         </div>
       </div>
     </>

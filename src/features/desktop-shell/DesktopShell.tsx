@@ -19,8 +19,9 @@ import { useCommandPalette } from '../search/useCommandPalette';
 import { DesktopWidgetLayer } from '../desktop-widgets/DesktopWidgetLayer';
 import { SnapZoneOverlay } from '../window-manager/components/SnapZoneOverlay';
 import { SnapAssist } from '../window-manager/components/SnapAssist';
-import { useSmartPlacement } from '../window-manager/useSmartPlacement';
 import { DesktopCompositionManager } from './DesktopCompositionManager';
+import { DevToolsOverlay } from '../dev-tools/DevToolsOverlay';
+import { useSmartPlacement } from '../window-manager/useSmartPlacement';
 
 export default function DesktopShell() {
   const [isStartOpen, setIsStartOpen] = useState(false);
@@ -203,7 +204,7 @@ export default function DesktopShell() {
           />
         )}
 
-        <div key={refreshKey} className="fixed inset-0 overflow-hidden w-screen h-screen">
+        <div key={refreshKey} className="fixed inset-0 overflow-hidden w-full h-full">
           <DesktopBackground />
           
           <DesktopSafeArea>
@@ -262,6 +263,7 @@ export default function DesktopShell() {
           <CommandPalette />
           <SnapZoneOverlay />
           <SnapAssist />
+          {process.env.NODE_ENV === 'development' && <DevToolsOverlay />}
         </div>
       </DesktopCompositionManager>
     </SessionRecovery>

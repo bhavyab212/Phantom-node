@@ -36,7 +36,7 @@ export default function WakeScreen({ onComplete }: WakeScreenProps) {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="w-[100vw] h-[100vh] sm:w-[80vw] sm:h-[80vw] max-w-[1200px] max-h-[1200px] rounded-full pointer-events-none"
+        className="w-[100%] h-[100%] sm:w-[80%] sm:h-[80%] max-w-[1200px] max-h-[1200px] rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 65%)'
         }}

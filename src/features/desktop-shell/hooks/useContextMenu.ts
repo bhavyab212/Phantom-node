@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { getDesktopWidth, getDesktopHeight } from '../../../utils/windowUtils';
 
 interface Point {
   x: number;
@@ -13,12 +14,16 @@ export function useContextMenu() {
     e.preventDefault();
     e.stopPropagation();
     
-    let x = e.clientX;
-    let y = e.clientY;
+    const zoom = typeof document !== 'undefined' && document.documentElement.style.zoom 
+      ? parseFloat(document.documentElement.style.zoom) || 1 
+      : 1;
+      
+    let x = e.clientX / zoom;
+    let y = e.clientY / zoom;
     
     // Viewport clamping
-    const screenW = typeof window !== 'undefined' ? window.innerWidth : 1024;
-    const screenH = typeof window !== 'undefined' ? window.innerHeight : 768;
+    const screenW = getDesktopWidth();
+    const screenH = getDesktopHeight();
     
     if (x + menuWidth > screenW) {
       x = screenW - menuWidth - 10;

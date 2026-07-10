@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDesktopPreferences } from '../../system/useDesktopPreferences';
+import { useAssetStore } from '../../system/useAssetStore';
 
 const WALLPAPER_GRADIENTS: Record<string, string> = {
   default: 'bg-gradient-to-br from-blue-900 to-black',
@@ -11,9 +12,15 @@ const WALLPAPER_GRADIENTS: Record<string, string> = {
 export default function DesktopBackground() {
   const [fetchedWallpaper, setFetchedWallpaper] = useState<string | null>(null);
   const wallpaperId = useDesktopPreferences((s) => s.wallpaperId);
+  const { desktopWallpaperUrl } = useAssetStore();
 
   useEffect(() => {
     if (wallpaperId !== 'default') return;
+
+    if (desktopWallpaperUrl) {
+      setFetchedWallpaper(desktopWallpaperUrl);
+      return;
+    }
 
     fetch('/api/wallpapers')
       .then((res) => res.json())
@@ -35,9 +42,10 @@ export default function DesktopBackground() {
 
   return (
     <div 
-      className={`absolute inset-0 overflow-hidden -z-10 select-none pointer-events-none transition-all duration-500 ease-in-out ${
+      className={`absolute inset-0 overflow-hidden -z-10 select-none pointer-events-auto transition-all duration-500 ease-in-out ${
         isGradient ? gradientClass : 'bg-black'
       }`}
+      {...({ 'data-dev-target': 'desktop' } as any)}
     >
       {/* Background Image */}
       {!isGradient && fetchedWallpaper && (
