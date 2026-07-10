@@ -18,6 +18,9 @@ export default function BootSequence({ onSequenceComplete }: BootSequenceProps) 
   const [fadeLogo, setFadeLogo] = useState(false);
   const [imageError, setImageError] = useState(false);
   
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [bootlogDone, setBootlogDone] = useState(false);
+
   const isPreloadingRef = useRef(false);
   const hasLoadedAssets = useRef(false);
 
@@ -46,10 +49,27 @@ export default function BootSequence({ onSequenceComplete }: BootSequenceProps) 
     return () => clearTimeout(t);
   }, [stage]);
 
-  // ── Stage: bootlog → preloader (driven by FastBootLog onComplete) ───────────
-  const handleLogComplete = useCallback(() => {
-    setStage('preloader');
+  // ── Preload the logo image in the background ──────────────────────────────
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/images/logo.png';
+    img.onload = () => setLogoLoaded(true);
+    img.onerror = () => {
+      setImageError(true);
+      setLogoLoaded(true); // Don't hang if image fails to load
+    };
   }, []);
+
+  // ── Stage: bootlog → preloader (driven by FastBootLog and Logo load) ────────
+  const handleLogComplete = useCallback(() => {
+    setBootlogDone(true);
+  }, []);
+
+  useEffect(() => {
+    if (stage === 'bootlog' && bootlogDone && logoLoaded) {
+      setStage('preloader');
+    }
+  }, [stage, bootlogDone, logoLoaded]);
 
   // ── Stage: preloader ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -258,7 +278,7 @@ export default function BootSequence({ onSequenceComplete }: BootSequenceProps) 
                   <img 
                     src="/images/logo.png" 
                     alt="Phantom Node" 
-                    className="w-48 h-auto object-contain"
+                    className="w-72 h-auto object-contain"
                     style={{ mixBlendMode: 'screen' }}
                     onError={() => setImageError(true)}
                   />

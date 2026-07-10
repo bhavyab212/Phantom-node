@@ -43,7 +43,7 @@ export default function PowerMenu({ isOpen, onClose, onSleep, onRestart, onShutd
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="absolute bottom-16 right-0 w-48 bg-white/10 backdrop-blur-xl border border-white/10 rounded-xl p-2 shadow-2xl z-50 flex flex-col gap-1 pointer-events-auto"
+          className="absolute bottom-16 right-0 w-48 bg-black/40 backdrop-filter backdrop-blur-3xl border border-white/10 rounded-xl p-2 shadow-2xl z-50 flex flex-col gap-1 pointer-events-auto"
         >
           <button 
             onClick={(e) => { e.stopPropagation(); onClose(); onSleep(); }}

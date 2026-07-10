@@ -108,17 +108,17 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
       >
         {time ? (
           <>
-            <div className="text-[72px] sm:text-[96px] font-sans font-light tracking-tight leading-none drop-shadow-[0_4px_32px_rgba(0,0,0,0.5)]">
+            <div className="text-[84px] sm:text-[112px] font-sans font-light tracking-tight leading-none drop-shadow-[0_4px_32px_rgba(0,0,0,0.5)]">
               {formatTime(time)}
             </div>
-            <div className="text-lg sm:text-xl font-sans font-medium text-white/80 mt-4 drop-shadow-md">
+            <div className="text-xl sm:text-2xl font-sans font-medium text-white/80 mt-5 drop-shadow-md">
               {formatDate(time)}
             </div>
           </>
         ) : (
           <div className="opacity-0">
-            <div className="text-[72px] sm:text-[96px] font-sans font-light tracking-tight leading-none">00:00 AM</div>
-            <div className="text-lg sm:text-xl font-sans font-medium mt-4">Loading...</div>
+            <div className="text-[84px] sm:text-[112px] font-sans font-light tracking-tight leading-none">00:00 AM</div>
+            <div className="text-xl sm:text-2xl font-sans font-medium mt-5">Loading...</div>
           </div>
         )}
       </motion.div>
@@ -132,10 +132,10 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
               onClick={(e) => { e.stopPropagation(); onUnlock?.(); }}
-              className="flex items-center gap-3 bg-white/15 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 hover:bg-white/25 transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] active:scale-95 pointer-events-auto"
+              className="flex items-center gap-3 bg-white/15 backdrop-blur-md px-10 py-3.5 rounded-full border border-white/10 hover:bg-white/25 transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] active:scale-95 pointer-events-auto"
             >
               <Unlock className="w-5 h-5 text-white/90" />
-              <span className="font-sans font-medium tracking-wide text-white/90">Unlock</span>
+              <span className="font-sans text-lg font-medium tracking-wide text-white/90">Unlock</span>
             </motion.button>
 
             <div className="flex gap-4 sm:gap-6 mt-10">
@@ -149,10 +149,10 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
                   onClick={(e) => { e.stopPropagation(); onUnlockToApp?.(app.id); }}
                   className="group flex flex-col items-center gap-3 pointer-events-auto"
                 >
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/5 group-hover:bg-white/20 transition-all shadow-lg active:scale-95">
-                    <app.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white/70 group-hover:text-white transition-colors" />
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-md rounded-[1.25rem] flex items-center justify-center border border-white/5 group-hover:bg-white/20 transition-all shadow-lg active:scale-95">
+                    <app.icon className="w-8 h-8 sm:w-10 sm:h-10 text-white/70 group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-[11px] sm:text-xs font-sans text-white/50 group-hover:text-white/90 transition-colors tracking-wide">
+                  <span className="text-xs sm:text-sm font-sans text-white/50 group-hover:text-white/90 transition-colors tracking-wide">
                     {app.label}
                   </span>
                 </motion.button>
@@ -198,7 +198,7 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
         transition={{ duration: 0.3 }}
       >
         <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 sm:px-5 sm:py-4 max-w-sm pointer-events-auto shadow-lg border border-white/5">
-          <p className="font-sans font-medium text-sm sm:text-base text-white/90">
+          <p className="font-sans font-medium text-base sm:text-lg text-white/90">
             AI-powered DevOps & automation
           </p>
         </div>
@@ -212,9 +212,9 @@ export default function LockScreen({ onUnlock, onUnlockToApp, onSleep, onRestart
         <div className="relative pointer-events-auto">
           <button 
             onClick={(e) => { e.stopPropagation(); setMenuOpen(true); }}
-            className="bg-white/10 backdrop-blur-md border border-white/5 w-11 h-11 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors shadow-lg"
+            className="bg-white/10 backdrop-blur-md border border-white/5 w-16 h-16 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors shadow-lg"
           >
-            <Power className="w-5 h-5 text-white/80" />
+            <Power className="w-8 h-8 text-white/80" />
           </button>
           
           <PowerMenu 
