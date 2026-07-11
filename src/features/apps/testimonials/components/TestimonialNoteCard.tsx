@@ -29,9 +29,9 @@ export const TestimonialNoteCard: React.FC<TestimonialNoteCardProps> = ({ testim
         variant="paper-grain" 
         className="w-full rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-[var(--glass-border)]"
       >
-        <div className="bg-[var(--glass-bg-light)] dark:bg-[#2a2a2a] backdrop-blur-md p-8 rounded-xl flex flex-col justify-between h-full min-h-[300px]">
+        <div className="bg-[var(--color-surface)] dark:bg-[var(--color-surface-2)] p-8 rounded-xl flex flex-col justify-between h-full min-h-[300px]">
           
-          <div className="text-[var(--color-accent)] opacity-40 mb-4">
+          <div className="text-[var(--color-text-muted)] opacity-60 mb-4">
             <Quote className="w-8 h-8 fill-current" />
           </div>
           
@@ -43,8 +43,8 @@ export const TestimonialNoteCard: React.FC<TestimonialNoteCardProps> = ({ testim
             <h4 className="font-bold text-[var(--color-text)] tracking-tight">
               {testimonial.clientName}
             </h4>
-            <div className="text-sm font-medium text-[var(--color-text)]/60">
-              {testimonial.clientRole}, <span className="text-[var(--color-accent)]">{testimonial.clientCompany}</span>
+            <div className="text-sm font-medium text-[var(--color-text-muted)]">
+              {testimonial.clientRole}, <span className="text-[var(--color-text)]">{testimonial.clientCompany}</span>
             </div>
             <div className="mt-2 text-[10px] uppercase tracking-widest font-bold text-[var(--color-text)]/40">
               {testimonial.serviceType}

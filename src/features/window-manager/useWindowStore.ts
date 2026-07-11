@@ -57,6 +57,28 @@ export const useWindowStore = create<WindowState>()(
         cascadeStack: [],
         
         openApp: (appId, title, defaultProps, fileContext, targetContext) => {
+          // --- BEGIN PHANTOM NODE STUDIO INTERCEPTION ---
+          const unifiedApps = ['phantom-node-studio', 'home', 'work', 'services', 'process', 'contact', 'about', 'results', 'testimonials'];
+          if (unifiedApps.includes(appId)) {
+            const intentView = appId === 'home' || appId === 'phantom-node-studio' ? 'overview' : (appId === 'about' || appId === 'testimonials' ? 'results' : appId);
+            appId = 'phantom-node-studio';
+            title = 'Phantom Node Studio';
+            targetContext = { ...(targetContext || {}), view: intentView };
+            
+            // For studio, always launch maximized and full screen
+            const screenW = typeof window !== 'undefined' ? window.innerWidth : 1280;
+            const screenH = typeof window !== 'undefined' ? window.innerHeight : 800;
+            defaultProps = {
+              ...defaultProps,
+              width: screenW,
+              height: screenH,
+              x: 0,
+              y: 0,
+              isMaximized: true
+            };
+          }
+          // --- END PHANTOM NODE STUDIO INTERCEPTION ---
+
           const { windows, topZIndex } = get();
           const existingWindow = windows.find(w => w.appId === appId);
           
@@ -69,6 +91,7 @@ export const useWindowStore = create<WindowState>()(
                     ...w, 
                     title: title || w.title,
                     isMinimized: false, 
+                    isMaximized: w.appId === 'phantom-node-studio' ? true : w.isMaximized,
                     isFocused: true, 
                     zIndex: getNextZIndex(),
                     fileContext: fileContext !== undefined ? fileContext : w.fileContext,
@@ -106,7 +129,7 @@ export const useWindowStore = create<WindowState>()(
             appId,
             title,
             isMinimized: false,
-            isMaximized: false,
+            isMaximized: defaultProps.isMaximized || false,
             snapState: 'none',
             isFocused: true,
             zIndex: topZIndex + 1,
@@ -258,7 +281,7 @@ export const useWindowStore = create<WindowState>()(
                 } : w)
               };
             } else {
-              const taskbarHeight = 64;
+              const taskbarHeight = win.appId === 'phantom-node-studio' ? 0 : 64;
               const maxWidth = getDesktopWidth();
               const maxHeight = getDesktopHeight() - taskbarHeight;
 
@@ -286,7 +309,7 @@ export const useWindowStore = create<WindowState>()(
             const win = state.windows.find(w => w.instanceId === instanceId);
             if (!win || win.isMaximized) return state;
 
-            const taskbarHeight = 64;
+            const taskbarHeight = win.appId === 'phantom-node-studio' ? 0 : 64;
             const maxWidth = getDesktopWidth();
             const maxHeight = getDesktopHeight() - taskbarHeight;
 

@@ -52,11 +52,12 @@ export const WorkflowNodePreview: React.FC<WorkflowNodePreviewProps> = ({
             onMouseLeave={() => interactive && setHoveredNodeId(null)}
           >
             <NeumorphicControl
-              raised={true}
+              raised={!isHovered || !interactive}
+              pressed={isHovered && interactive}
               rounded="full"
               className={cn(
-                "w-12 h-12 flex items-center justify-center p-0 transition-transform duration-200 cursor-default",
-                isHovered && interactive ? "-translate-y-2 text-[var(--color-accent)]" : "text-[var(--color-text)]"
+                "w-12 h-12 flex items-center justify-center p-0 transition-all duration-100 cursor-pointer",
+                isHovered && interactive ? "text-[var(--color-accent)]" : "text-[var(--color-text)]"
               )}
             >
               {node.icon}

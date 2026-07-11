@@ -83,18 +83,14 @@ const CaseStudiesAppContent: React.FC = () => {
           </div>
         ) : (
           /* Grid of Case Folders */
-          <div 
-            className="grid gap-8 p-4 md:p-8"
-            style={{ 
-              gridTemplateColumns: `repeat(${isCompact ? 1 : contentColumns}, minmax(0, 1fr))` 
-            }}
-          >
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 p-4 md:p-8 space-y-8">
             {filteredCases.map((caseStudy) => (
-              <CaseFolderCard 
-                key={caseStudy.id} 
-                caseStudy={caseStudy} 
-                onClick={() => setActiveCaseId(caseStudy.id)} 
-              />
+              <div key={caseStudy.id} className="break-inside-avoid">
+                <CaseFolderCard 
+                  caseStudy={caseStudy} 
+                  onClick={() => setActiveCaseId(caseStudy.id)} 
+                />
+              </div>
             ))}
           </div>
         )}

@@ -41,10 +41,11 @@ const TestimonialsAppContent: React.FC = () => {
           /* WIDE LAYOUT */
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 items-start">
             
-            {/* Left: Corkboard grid (3 columns) */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="flex-1 columns-1 md:columns-2 xl:columns-3 gap-8 space-y-8">
               {TESTIMONIALS.map(testimonial => (
-                <TestimonialNoteCard key={testimonial.id} testimonial={testimonial} />
+                <div key={testimonial.id} className="break-inside-avoid">
+                  <TestimonialNoteCard testimonial={testimonial} />
+                </div>
               ))}
             </div>
 

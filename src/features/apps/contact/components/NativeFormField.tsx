@@ -28,18 +28,18 @@ export const NativeFormField: React.FC<NativeFormFieldProps> = ({
   }, [value, isTextarea]);
 
   const baseClasses = cn(
-    "w-full bg-[var(--color-surface)] dark:bg-[#1a1a1a] text-[var(--color-text)] outline-none rounded-lg px-4 py-3 transition-all duration-200",
-    "shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] dark:shadow-[inset_0_2px_6px_rgba(0,0,0,0.5)]",
-    "border border-[var(--glass-border)]",
-    "focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.05),0_0_0_2px_var(--color-accent)] dark:focus:shadow-[inset_0_2px_6px_rgba(0,0,0,0.5),0_0_0_2px_var(--color-accent)]",
-    "placeholder:text-[var(--color-text)]/30 font-medium",
-    error && "shadow-[inset_0_0_0_1px_var(--color-error)] dark:shadow-[inset_0_0_0_1px_var(--color-error)]",
+    "w-full bg-white text-gray-900 outline-none rounded-lg px-4 py-3 transition-all duration-200",
+    "shadow-sm",
+    "border border-gray-200",
+    "focus:shadow-[0_0_0_2px_#FBBF24] focus:border-transparent",
+    "placeholder:text-gray-400 font-medium",
+    error && "shadow-[0_0_0_1px_#ef4444]",
     className
   );
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <label className="text-sm font-bold uppercase tracking-wider text-[var(--color-text)]/70 px-1">
+      <label className="text-sm font-bold uppercase tracking-wider text-gray-700 px-1">
         {label}
       </label>
       
@@ -62,7 +62,7 @@ export const NativeFormField: React.FC<NativeFormFieldProps> = ({
       )}
 
       {error && (
-        <div className="flex items-center gap-1.5 px-1 mt-1 text-[var(--color-error)] animate-in slide-in-from-top-1 opacity-90">
+        <div className="flex items-center gap-1.5 px-1 mt-1 text-red-500 animate-in slide-in-from-top-1 opacity-90">
           <AlertCircle className="w-4 h-4" />
           <span className="text-xs font-semibold">{error}</span>
         </div>

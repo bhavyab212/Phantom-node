@@ -38,6 +38,9 @@ export default function DesktopShell() {
   const { openApp } = useWindowStore();
   const { placeWindow } = useSmartPlacement();
   const { brightness, nightLight, clipboard, setClipboard, setIconPosition } = useDesktopPreferences();
+  const windows = useWindowStore(s => s.windows);
+  const studioWindow = windows.find(w => w.appId === 'phantom-node-studio');
+  const isStudioFocusMode = !!(studioWindow && !studioWindow.isMinimized);
   const mousePosRef = useRef({ x: 150, y: 150 });
 
   // Track mouse coordinates for pasting at cursor position on Ctrl+V
@@ -231,6 +234,8 @@ export default function DesktopShell() {
               </div>
             </div>
           </DesktopSafeArea>
+
+          {/* Studio Focus Mode Overlay Removed as per request */}
 
           {/* Marquee Selection Box */}
           {isDragging && (

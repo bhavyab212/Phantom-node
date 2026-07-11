@@ -33,8 +33,8 @@ export const PALETTE_COMMANDS: PaletteCommand[] = [
     action: () => {
       const { openApp } = useWindowStore.getState();
       const APP_REGISTRY = require('../window-manager/window-registry').APP_REGISTRY;
-      const entry = APP_REGISTRY['home'];
-      if (entry) openApp('home', entry.title, { width: entry.defaultWidth, height: entry.defaultHeight, x: entry.defaultX, y: entry.defaultY });
+      const entry = APP_REGISTRY['phantom-node-studio'];
+      if (entry) openApp('phantom-node-studio', entry.title, { width: entry.defaultWidth, height: entry.defaultHeight, x: entry.defaultX, y: entry.defaultY });
     }
   },
   {

@@ -8,6 +8,8 @@ export interface CaseStudy {
   headlineMetric: string;
   year: number;
   duration: string;
+  status: 'Completed' | 'In Progress';
+  impact: string;
   heroMedia: {
     type: 'image';
     url?: string;

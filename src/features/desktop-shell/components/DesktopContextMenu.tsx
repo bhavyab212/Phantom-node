@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Sparkles, LayoutGrid, AlignHorizontalDistributeCenter, Home, Folder, Palette, Monitor, ChevronRight, RefreshCw } from 'lucide-react';
+import { Sparkles, LayoutGrid, AlignHorizontalDistributeCenter, Home, Folder, Palette, Monitor, ChevronRight, RefreshCw, MonitorDown } from 'lucide-react';
 import { getDesktopWidth, getDesktopHeight } from '../../../utils/windowUtils';
 import { useWindowStore } from '../../window-manager/useWindowStore';
 import { APP_REGISTRY } from '../../window-manager/window-registry';
@@ -22,6 +22,7 @@ export function DesktopContextMenu({ isOpen, position, onClose, onRefresh }: Des
   const menuRef = useRef<HTMLDivElement>(null);
   const { openApp } = useWindowStore();
   const { tidyDesktop } = useDesktopComposition();
+  const { taskbarAutoHide, setTaskbarAutoHide } = useDesktopPreferences();
 
   // Close when clicking outside
   useEffect(() => {
@@ -100,6 +101,21 @@ export function DesktopContextMenu({ isOpen, position, onClose, onRefresh }: Des
       {/* These would normally toggle states, but for now we'll just keep them as static buttons or connected to preferences later */}
       <button 
         className="w-full flex items-center justify-between px-4 py-1.5 text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+        onClick={() => {
+          setTaskbarAutoHide(!taskbarAutoHide);
+          onClose();
+        }}
+        role="menuitem"
+      >
+        <div className="flex items-center gap-3">
+          <MonitorDown className="w-4 h-4" />
+          <span>Auto-hide taskbar</span>
+        </div>
+        {taskbarAutoHide && <span className="text-[var(--accent-color)] text-xs">✓</span>}
+      </button>
+
+      <button 
+        className="w-full flex items-center justify-between px-4 py-1.5 text-white/90 hover:text-white hover:bg-white/10 transition-colors"
         onClick={() => onClose()}
         role="menuitem"
       >
@@ -107,7 +123,7 @@ export function DesktopContextMenu({ isOpen, position, onClose, onRefresh }: Des
           <LayoutGrid className="w-4 h-4" />
           <span>Show widgets</span>
         </div>
-        <span className="text-white/50 text-xs">✓</span>
+        <span className="text-[var(--accent-color)] text-xs">✓</span>
       </button>
 
       <button 
@@ -126,8 +142,8 @@ export function DesktopContextMenu({ isOpen, position, onClose, onRefresh }: Des
       <button 
         className="w-full flex items-center gap-3 px-4 py-1.5 text-white/90 hover:text-white hover:bg-white/10 transition-colors"
         onClick={() => {
-          const entry = APP_REGISTRY['home'];
-          if (entry) openApp('home', entry.title, { width: entry.defaultWidth, height: entry.defaultHeight });
+          const entry = APP_REGISTRY['phantom-node-studio'];
+          if (entry) openApp('phantom-node-studio', entry.title, { width: entry.defaultWidth, height: entry.defaultHeight });
           onClose();
         }}
         role="menuitem"

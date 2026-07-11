@@ -41,19 +41,28 @@ export default function AppWindow({ window }: AppWindowProps) {
   
   if (!appEntry) return null;
 
+  const isStudioApp = window.appId === 'phantom-node-studio';
+  // Force studio app to always be maximized and cover the full desktop, ignoring store coordinates
+  const effectiveWidth = isStudioApp ? getDesktopWidth() : window.width;
+  const effectiveHeight = isStudioApp ? getDesktopHeight() : window.height;
+  const effectiveX = isStudioApp ? 0 : window.x;
+  const effectiveY = isStudioApp ? 0 : window.y;
+  const effectiveIsMaximized = isStudioApp ? true : window.isMaximized;
+
   return (
     <Rnd
+      {...({ 'data-dev-target': `window-${window.instanceId}` } as any)}
       scale={desktopZoom / 100}
       default={{
-        x: window.x,
-        y: window.y,
-        width: window.width,
-        height: window.height,
+        x: effectiveX,
+        y: effectiveY,
+        width: effectiveWidth,
+        height: effectiveHeight,
       }}
-      size={{ width: window.width, height: window.height }}
-      position={{ x: window.x, y: window.y }}
-      disableDragging={window.isMaximized}
-      enableResizing={enableWindowResizing && !window.isMaximized && window.snapState === 'none'}
+      size={{ width: effectiveWidth, height: effectiveHeight }}
+      position={{ x: effectiveX, y: effectiveY }}
+      disableDragging={effectiveIsMaximized}
+      enableResizing={enableWindowResizing && !effectiveIsMaximized && window.snapState === 'none'}
       onDragStart={() => {
         focusWindow(window.instanceId);
         setIsDraggingOverZone(true);
@@ -116,7 +125,7 @@ export default function AppWindow({ window }: AppWindowProps) {
         }
         transition={{ type: 'spring', damping: 26, stiffness: 340 }}
         className={`flex flex-col w-full h-full bg-transparent origin-bottom overflow-hidden border transition-all duration-200 ${
-          (window.isMaximized || window.snapState !== 'none') ? 'rounded-none border-white/10' : 'rounded-xl border-white/5'
+          (effectiveIsMaximized || window.snapState !== 'none') ? 'rounded-none border-transparent' : 'rounded-xl border-white/5'
         }`}
         style={{
           boxShadow: window.isFocused 
@@ -128,48 +137,50 @@ export default function AppWindow({ window }: AppWindowProps) {
         <InactiveWindowDim isFocused={window.isFocused} isDragging={false} />
         
         {/* Title Bar */}
-        <div 
-          className="window-drag-handle h-10 bg-[#2C2C2C]/90 backdrop-blur-md flex items-center justify-between px-3 select-none pointer-events-auto"
-          onDoubleClick={(e) => { e.stopPropagation(); toggleMaximizeWindow(window.instanceId); }}
-        >
-          <div className="flex items-center space-x-2 overflow-hidden flex-1">
-            <span className="text-xs font-medium text-white/80 truncate">{window.title}</span>
-          </div>
-          
-          {/* Window Controls */}
-          <div className="flex items-center space-x-1 ml-4 shrink-0">
-            <button 
-              className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
-              onClick={(e) => { e.stopPropagation(); minimizeWindow(window.instanceId); }}
-              aria-label="Minimize"
-            >
-              <Minus size={14} />
-            </button>
-            <div className="relative">
-              <button 
-                ref={maximizeBtnRef}
-                className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
-                onClick={(e) => { e.stopPropagation(); toggleMaximizeWindow(window.instanceId); }}
-                onMouseEnter={() => {
-                  if (settings.showSnapLayoutFlyoutOnHover) {
-                    showFlyout(window.instanceId);
-                  }
-                }}
-                aria-label={window.isMaximized ? "Restore" : "Maximize"}
-              >
-                {window.isMaximized ? <Copy size={13} /> : <Square size={12} />}
-              </button>
-              <SnapLayoutFlyout windowId={window.instanceId} buttonRef={maximizeBtnRef} />
+        {window.appId !== 'phantom-node-studio' && (
+          <div 
+            className="window-drag-handle h-10 bg-[#2C2C2C]/90 backdrop-blur-md flex items-center justify-between px-3 select-none pointer-events-auto"
+            onDoubleClick={(e) => { e.stopPropagation(); toggleMaximizeWindow(window.instanceId); }}
+          >
+            <div className="flex items-center space-x-2 overflow-hidden flex-1">
+              <span className="text-xs font-medium text-white/80 truncate">{window.title}</span>
             </div>
-            <button 
-              className="w-8 h-8 rounded hover:bg-red-500 flex items-center justify-center text-white/70 hover:text-white transition-colors"
-              onClick={(e) => { e.stopPropagation(); closeWindow(window.instanceId); }}
-              aria-label="Close"
-            >
-              <X size={14} />
-            </button>
+            
+            {/* Window Controls */}
+            <div className="flex items-center space-x-1 ml-4 shrink-0">
+              <button 
+                className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                onClick={(e) => { e.stopPropagation(); minimizeWindow(window.instanceId); }}
+                aria-label="Minimize"
+              >
+                <Minus size={14} />
+              </button>
+              <div className="relative">
+                <button 
+                  ref={maximizeBtnRef}
+                  className="w-8 h-8 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                  onClick={(e) => { e.stopPropagation(); toggleMaximizeWindow(window.instanceId); }}
+                  onMouseEnter={() => {
+                    if (settings.showSnapLayoutFlyoutOnHover) {
+                      showFlyout(window.instanceId);
+                    }
+                  }}
+                  aria-label={window.isMaximized ? "Restore" : "Maximize"}
+                >
+                  {window.isMaximized ? <Copy size={13} /> : <Square size={12} />}
+                </button>
+                <SnapLayoutFlyout windowId={window.instanceId} buttonRef={maximizeBtnRef} />
+              </div>
+              <button 
+                className="w-8 h-8 rounded hover:bg-red-500 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                onClick={(e) => { e.stopPropagation(); closeWindow(window.instanceId); }}
+                aria-label="Close"
+              >
+                <X size={14} />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         
         {/* Content Area */}
         <div className={`flex-1 flex flex-col relative pointer-events-auto overflow-hidden ${appEntry.storyMode ? '' : 'bg-transparent'}`}>

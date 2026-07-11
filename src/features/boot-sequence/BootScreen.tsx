@@ -74,9 +74,9 @@ export default function BootScreen({ onBootComplete }: BootScreenProps) {
           ease: ANIM_LOGO.ease, 
           delay: ANIM_LOGO.delay 
         }}
-        className="text-white text-[48px] font-mono tracking-widest mb-8"
+        className="mb-8"
       >
-        LOGO
+        <img src="/images/boot-logo.png?v=2" alt="Phantom Node Boot Logo" className="w-32 h-auto" />
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}

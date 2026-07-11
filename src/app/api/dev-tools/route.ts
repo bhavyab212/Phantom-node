@@ -8,12 +8,15 @@ interface HardcodeRequest {
   target: string; // file key
   patches?: Record<string, string | number>; // constant name → new value
   layoutOverride?: { id: string; rect: any }; // for writing directly into HARDCODED_LAYOUTS
+  windowRegistryOverride?: { appId: string; patches: Record<string, number> };
 }
 
 // Map of target keys → relative src paths and how to patch them
 const TARGET_FILES: Record<string, string> = {
   widgetLayout: 'features/desktop-widgets/useAutoLayout.ts',
   desktopPreferences: 'features/system/useDesktopPreferences.ts',
+  windowPreferences: 'features/system/useDesktopPreferences.ts',
+  windowRegistry: 'features/window-manager/window-registry.tsx',
 };
 
 function applyPatches(src: string, patches: Record<string, string | number>): string {
@@ -31,10 +34,16 @@ function applyPatches(src: string, patches: Record<string, string | number>): st
       result = result.replace(new RegExp(`(${key}:\\s*)([\\d.]+)(,)`, 'g'), `$1${value}$3`);
       continue;
     }
-    // Match:  key: 'string', 
     const strPropRe = new RegExp(`(${key}:\\s*)('[^']*')`, 'g');
     if (strPropRe.test(result)) {
       result = result.replace(new RegExp(`(${key}:\\s*)('[^']*')`, 'g'), `$1'${value}'`);
+      continue;
+    }
+    // Match:  key: boolean,
+    const boolPropRe = new RegExp(`(${key}:\\s*)(true|false)(,)`, 'g');
+    if (boolPropRe.test(result)) {
+      result = result.replace(new RegExp(`(${key}:\\s*)(true|false)(,)`, 'g'), `$1${value}$3`);
+      continue;
     }
   }
   return result;
@@ -63,6 +72,42 @@ function applyLayoutOverride(src: string, override: { id: string; rect: any }): 
   return src.replace(blockRegex, `$1${blockContent}$3`);
 }
 
+function applyWindowRegistryOverride(src: string, override: { appId: string; patches: Record<string, number> }): string {
+  const lines = src.split('\n');
+  let inBlock = false;
+  let blockIndent = '';
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    
+    // Check if we entered the block for the appId
+    const blockMatch = line.match(/^(\s*)(['"]?)(.*?)\2:\s*\{/);
+    if (blockMatch && blockMatch[3] === override.appId) {
+      inBlock = true;
+      blockIndent = blockMatch[1];
+      continue;
+    }
+
+    if (inBlock) {
+      // Check if we exited the block
+      if (line.startsWith(blockIndent + '},') || line.startsWith(blockIndent + '}')) {
+        inBlock = false;
+        continue;
+      }
+
+      // Check if line matches any patch key
+      for (const [key, value] of Object.entries(override.patches)) {
+        const propRe = new RegExp(`^(\\s*${key}:\\s*)([\\d.]+)(,?)`);
+        if (propRe.test(line)) {
+          lines[i] = line.replace(propRe, `$1${value}$3`);
+        }
+      }
+    }
+  }
+
+  return lines.join('\n');
+}
+
 export async function POST(req: NextRequest) {
   // Only allow in development
   if (process.env.NODE_ENV === 'production') {
@@ -71,7 +116,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body: HardcodeRequest = await req.json();
-    const { target, patches, layoutOverride } = body;
+    const { target, patches, layoutOverride, windowRegistryOverride } = body;
 
     const relPath = TARGET_FILES[target];
     if (!relPath) {
@@ -87,6 +132,9 @@ export async function POST(req: NextRequest) {
     }
     if (layoutOverride) {
       patched = applyLayoutOverride(patched, layoutOverride);
+    }
+    if (windowRegistryOverride) {
+      patched = applyWindowRegistryOverride(patched, windowRegistryOverride);
     }
 
     if (patched === original) {

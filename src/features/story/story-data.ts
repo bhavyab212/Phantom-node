@@ -14,7 +14,7 @@ export interface ContentItem {
 
 export const GLOBAL_CONTENT_INDEX: ContentItem[] = [
   // Apps
-  { id: 'idx-app-home', type: 'app', label: 'Home / Studio', keywords: ['home', 'studio', 'agency', 'about'], targetApp: 'home' },
+  { id: 'idx-app-home', type: 'app', label: 'Home / Studio', keywords: ['home', 'studio', 'agency', 'about'], targetApp: 'phantom-node-studio' },
   { id: 'idx-app-services', type: 'app', label: 'Services', keywords: ['services', 'offerings', 'what we do'], targetApp: 'services' },
   { id: 'idx-app-contact', type: 'app', label: 'Contact', keywords: ['contact', 'hire us', 'start project', 'email'], targetApp: 'contact' },
   { id: 'idx-app-work', type: 'app', label: 'Work', keywords: ['work', 'portfolio', 'case studies', 'projects'], targetApp: 'work' },

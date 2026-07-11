@@ -9,7 +9,7 @@ import { useSmartPlacement } from '../../window-manager/useSmartPlacement';
 import { useState } from 'react';
 
 export default function TaskbarPinnedApps() {
-  const pinnedApps = SYSTEM_APPS.filter(app => app.pinned);
+  const pinnedApps = SYSTEM_APPS.filter(app => app.pinned && app.showInTaskbar !== false);
   
   const { windows, openApp, focusWindow, minimizeWindow, restoreWindow } = useWindowStore();
   const { placeWindow } = useSmartPlacement();

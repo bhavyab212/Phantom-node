@@ -29,16 +29,20 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
       <button
         onClick={() => onClick?.(id)}
         className={cn(
-          'flex items-center gap-3 px-3 py-1.5 mx-2 rounded-[var(--radius-lg)] transition-colors group relative outline-none',
+          'flex items-center gap-3 px-3 py-1.5 mx-2 rounded-[var(--radius-lg)] transition-all duration-200 group relative outline-none',
           'focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]',
           isActive
-            ? 'bg-[color-mix(in_oklch,var(--color-accent)_15%,transparent)] text-[var(--color-accent)]'
-            : 'text-[var(--color-text)]/70 hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]'
+            ? 'bg-[var(--color-surface-2)] shadow-[var(--neu-shadow-dark-pressed)] dark:shadow-[var(--neu-shadow-light-pressed)] text-[var(--color-text)]'
+            : 'text-[var(--color-text-muted)] hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]'
         )}
         title={isCollapsed ? label : undefined}
       >
+        {/* Active signal dot */}
+        {isActive && (
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[14px] bg-[var(--color-accent)] rounded-r-full" />
+        )}
         {icon && (
-          <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
+          <div className={cn("flex items-center justify-center w-5 h-5 flex-shrink-0 transition-colors", isActive ? "text-[var(--color-accent)]" : "text-current")}>
             {icon}
           </div>
         )}
@@ -123,10 +127,10 @@ export const NativeAppSidebar: React.FC<NativeAppSidebarProps> = ({
           'backdrop-blur-[var(--glass-blur)] backdrop-saturate-[var(--glass-saturate)]',
           // Depth separation tint (surface-2 vs surface)
           'dark:bg-[color-mix(in_oklch,var(--color-surface-2)_65%,transparent)]',
-          isOverlay ? 'fixed inset-y-0 left-0 z-40 w-[260px]' : '',
+          isOverlay ? 'fixed inset-y-0 left-0 z-40 w-[240px]' : '',
           isOverlay && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0',
-          !isOverlay && sidebarMode === 'collapsed' ? 'w-[48px]' : '',
-          !isOverlay && sidebarMode === 'expanded' ? 'w-[260px]' : '',
+          !isOverlay && sidebarMode === 'collapsed' ? 'w-[56px]' : '',
+          !isOverlay && sidebarMode === 'expanded' ? 'w-[240px]' : '',
           className
         )}
         style={!isOverlay ? { gridArea: 'sidebar' } : undefined}

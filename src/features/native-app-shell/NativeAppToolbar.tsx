@@ -27,7 +27,7 @@ export const NativeAppToolbar: React.FC<NativeAppToolbarProps> = ({
   return (
     <div
       className={cn(
-        'flex items-center px-4 h-[52px] select-none',
+        'flex items-center px-4 h-[56px] select-none',
         'bg-[var(--glass-bg-light)] dark:bg-[var(--glass-bg-dark)]',
         'backdrop-blur-[var(--glass-blur)] backdrop-saturate-[var(--glass-saturate)]',
         'border-b border-[var(--glass-border)] z-20',

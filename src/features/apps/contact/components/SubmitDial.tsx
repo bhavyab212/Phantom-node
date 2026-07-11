@@ -18,24 +18,21 @@ export const SubmitDial: React.FC<SubmitDialProps> = ({ status, onClick, disable
   const isSuccess = status === 'success';
 
   return (
-    <NeumorphicControl
-      raised={isIdle && !disabled}
-      pressed={isSending || isSuccess || disabled}
-      rounded="full"
+    <button
       onClick={() => {
         if (!disabled && isIdle) onClick();
       }}
       className={cn(
-        "relative h-16 w-full sm:w-64 flex items-center justify-center p-0 transition-all duration-500 overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]",
+        "relative h-16 w-full sm:w-64 flex items-center justify-center p-0 transition-all duration-500 overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white bg-gray-900 rounded-full",
         disabled && "opacity-50 cursor-not-allowed",
-        !disabled && isIdle && "cursor-pointer hover:text-[var(--color-accent)]",
+        !disabled && isIdle && "cursor-pointer hover:bg-black",
         className
       )}
     >
       {/* Background fill for success state */}
       <div 
         className={cn(
-          "absolute inset-0 bg-[var(--color-accent)] transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+          "absolute inset-0 bg-green-500 transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
           isSuccess ? "scale-100" : "scale-0 rounded-full opacity-0"
         )}
       />
@@ -43,17 +40,17 @@ export const SubmitDial: React.FC<SubmitDialProps> = ({ status, onClick, disable
       {/* Content wrapper */}
       <div className={cn(
         "relative z-10 flex items-center gap-3 transition-colors duration-300 font-bold tracking-wider uppercase",
-        isSuccess ? "text-white" : "text-[var(--color-text)]"
+        isSuccess ? "text-white" : "text-yellow-400"
       )}>
         {isIdle && (
           <>
-            <span>Submit Inquiry</span>
+            <span>Send brief</span>
             <Send className="w-4 h-4 ml-1" />
           </>
         )}
         
         {isSending && (
-          <div className="flex items-center gap-3 opacity-70">
+          <div className="flex items-center gap-3 opacity-70 text-yellow-400">
             <span>Sending</span>
             <div className="flex gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-current animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -70,6 +67,6 @@ export const SubmitDial: React.FC<SubmitDialProps> = ({ status, onClick, disable
           </div>
         )}
       </div>
-    </NeumorphicControl>
+    </button>
   );
 };

@@ -1,12 +1,20 @@
 @layer base {
   :root {
-    /* Base fallbacks in case not provided by the main theme */
-    --color-bg: oklch(0.1 0 0);
-    --color-surface: oklch(0.15 0 0);
-    --color-surface-2: oklch(0.2 0 0);
-    --color-text: oklch(0.9 0 0);
-    --color-accent: oklch(0.6 0.15 250);
+    /* OBSIDIAN PAPER: Light Mode */
+    --color-bg: #F4F2EC;         /* Canvas / porcelain */
+    --color-surface: #FBFAF7;    /* Primary surface */
+    --color-surface-2: #EEECE5;  /* Secondary surface */
+    --color-surface-elevated: #FFFFFF; /* Elevated white */
     
+    --color-text: #11110F;       /* Main ink */
+    --color-text-muted: #66645E; /* Muted ink */
+    
+    --color-accent: #F5C518;     /* Signal yellow */
+    --color-accent-highlight: #FFE16A;
+    --color-accent-shadow: #B88600;
+    
+    --glass-border: rgba(17, 17, 15, 0.10); /* Hairline */
+
     /* Spacing mapped to responsive values */
     --space-4: 1rem;
     --space-6: 1.5rem;
@@ -14,44 +22,69 @@
     --space-12: 3rem;
     
     /* Radii */
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
     
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-sm: 0 1px 2px 0 rgba(17, 17, 15, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(17, 17, 15, 0.08), 0 2px 4px -2px rgba(17, 17, 15, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(17, 17, 15, 0.1), 0 4px 6px -4px rgba(17, 17, 15, 0.05);
 
     /* Glassmorphic surfaces */
-    --glass-blur: 20px;
-    --glass-saturate: 180%;
-    --glass-bg-light: oklch(from var(--color-surface) l c h / 0.65);
-    --glass-bg-dark: oklch(from var(--color-surface) l c h / 0.55);
-    --glass-border: oklch(from var(--color-text) l c h / 0.08);
-    --glass-highlight: inset 0 1px 0 oklch(1 0 0 / 0.08);
+    --glass-blur: 24px;
+    --glass-saturate: 140%;
+    --glass-bg-light: rgba(251, 250, 247, 0.78);
+    --glass-bg-dark: rgba(20, 20, 18, 0.78);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
-    /* Neumorphic surfaces — require an opaque base color */
+    /* Neumorphic surfaces */
     --neu-base-light: var(--color-surface-2);
     --neu-base-dark: var(--color-surface-2);
     
     --neu-shadow-light-raised: 
-      6px 6px 12px oklch(from var(--color-bg) l c h / 0.4),
-      -4px -4px 10px oklch(1 0 0 / 0.6);
+      6px 6px 16px rgba(17, 17, 15, 0.08),
+      -4px -4px 12px rgba(255, 255, 255, 0.8);
     --neu-shadow-light-pressed: 
-      inset 4px 4px 8px oklch(from var(--color-bg) l c h / 0.4),
-      inset -2px -2px 6px oklch(1 0 0 / 0.5);
+      inset 4px 4px 8px rgba(17, 17, 15, 0.06),
+      inset -2px -2px 6px rgba(255, 255, 255, 0.7);
       
     --neu-shadow-dark-raised: 
-      6px 6px 12px oklch(0 0 0 / 0.5),
-      -4px -4px 10px oklch(1 1 0 / 0.03);
+      6px 6px 16px rgba(0, 0, 0, 0.6),
+      -4px -4px 12px rgba(255, 255, 255, 0.03);
     --neu-shadow-dark-pressed: 
-      inset 4px 4px 8px oklch(0 0 0 / 0.5),
-      inset -2px -2px 6px oklch(1 1 0 / 0.03);
+      inset 4px 4px 8px rgba(0, 0, 0, 0.6),
+      inset -2px -2px 6px rgba(255, 255, 255, 0.02);
 
-    /* Skeuomorphic accent textures — used sparingly */
-    --skeu-grain-opacity: 0.04;
-    --skeu-stitch-color: oklch(from var(--color-text) l c h / 0.15);
-    --skeu-metal-gradient: linear-gradient(135deg, 
-      oklch(0.85 0.01 90), oklch(0.7 0.01 90), oklch(0.85 0.01 90));
+    /* Skeuomorphic accent textures */
+    --skeu-grain-opacity: 0.03;
+    --skeu-stitch-color: rgba(17, 17, 15, 0.15);
+    --skeu-metal-gradient: linear-gradient(135deg, #E2DFD8, #D1CEC5, #E2DFD8);
+  }
+
+  .dark {
+    /* OBSIDIAN PAPER: Dark Mode */
+    --color-bg: #0C0C0B;         /* Canvas / obsidian */
+    --color-surface: #141412;    /* Primary surface */
+    --color-surface-2: #1C1C19;  /* Secondary surface */
+    --color-surface-elevated: rgba(28, 28, 25, 0.78); /* Elevated dark glass */
+    
+    --color-text: #F6F3EA;       /* Main paper text */
+    --color-text-muted: #A8A49B; /* Muted paper text */
+    
+    --color-accent: #FFD12F;     /* Signal yellow */
+    --color-accent-highlight: #FFE782;
+    --color-accent-shadow: #8E6700;
+    
+    --glass-border: rgba(246, 243, 234, 0.10); /* Hairline */
+    --glass-highlight: inset 0 1px 0 rgba(246, 243, 234, 0.06);
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+
+    --skeu-stitch-color: rgba(246, 243, 234, 0.15);
+    --skeu-metal-gradient: linear-gradient(135deg, #2A2A26, #1C1C19, #2A2A26);
   }
 }

@@ -40,7 +40,7 @@ export const CaseFolderCard: React.FC<CaseFolderCardProps> = ({ caseStudy, onCli
         className="w-full h-full rounded-b-lg rounded-tr-lg transition-transform duration-300 group-hover:-translate-y-1 group-active:translate-y-0"
       >
         <SkeuomorphicAccent variant="stitched-edge" className="h-full border-[var(--glass-border)]">
-          <div className="bg-[var(--glass-bg-light)] dark:bg-[var(--glass-bg-dark)] backdrop-blur-[var(--glass-blur)] backdrop-saturate-[var(--glass-saturate)] p-6 h-48 flex flex-col justify-between relative shadow-[var(--shadow-md)] rounded-b-lg rounded-tr-lg">
+          <div className="bg-[var(--glass-bg-light)] dark:bg-[var(--glass-bg-dark)] backdrop-blur-[var(--glass-blur)] backdrop-saturate-[var(--glass-saturate)] p-6 min-h-[14rem] h-auto flex flex-col justify-between relative shadow-[var(--shadow-md)] rounded-b-lg rounded-tr-lg">
             
             {/* Top right category pill */}
             <div className="absolute top-4 right-4 bg-[var(--color-surface)] px-2 py-1 rounded-md shadow-sm border border-[var(--glass-border)]">

@@ -41,7 +41,8 @@ export default function DesktopIconGrid({ selectedIds, onSelect, onOpen, onConte
     const handleTidy = () => {
       const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       
-      SYSTEM_APPS.forEach((app, index) => {
+      const visibleApps = SYSTEM_APPS.filter(app => app.showOnDesktop !== false);
+      visibleApps.forEach((app, index) => {
         const delay = isReducedMotion ? 0 : index * 30;
         setTimeout(() => {
           const pos = getInitialPosition(index);
@@ -54,9 +55,11 @@ export default function DesktopIconGrid({ selectedIds, onSelect, onOpen, onConte
     return () => window.removeEventListener('tidy-desktop-icons', handleTidy);
   }, [iconLayoutZone, setIconPosition]);
 
+  const visibleApps = SYSTEM_APPS.filter(app => app.showOnDesktop !== false);
+
   return (
     <div className="relative w-full h-full p-2 overflow-hidden pointer-events-none">
-      {SYSTEM_APPS.map((app, index) => {
+      {visibleApps.map((app, index) => {
         const position = iconPositions[app.id] || getInitialPosition(index);
         const isCut = clipboard.action === 'cut' && clipboard.appId === app.id;
         

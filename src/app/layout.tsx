@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { LiquidCursor } from "../components/liquid-cursor";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
     default: 'Agency WebOS | Premium Tech Solutions',
   },
   description: "A comprehensive tech agency offering DevOps, Full-Stack Dev, Cybersecurity, and AI Integration.",
+  icons: {
+    icon: '/icon.png?v=3',
+  },
   openGraph: {
     title: 'Agency WebOS',
     description: 'A comprehensive tech agency offering DevOps, Full-Stack Dev, Cybersecurity, and AI Integration.',
@@ -54,6 +58,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col overflow-hidden bg-background text-foreground font-sans">
+        <LiquidCursor />
         {children}
         {modal}
         <script

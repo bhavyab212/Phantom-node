@@ -52,7 +52,7 @@ export default function BootSequence({ onSequenceComplete }: BootSequenceProps) 
   // ── Preload the logo image in the background ──────────────────────────────
   useEffect(() => {
     const img = new Image();
-    img.src = '/images/logo.png';
+    img.src = '/images/boot-logo.png';
     img.onload = () => setLogoLoaded(true);
     img.onerror = () => {
       setImageError(true);
@@ -276,9 +276,9 @@ export default function BootSequence({ onSequenceComplete }: BootSequenceProps) 
               >
                 {!imageError ? (
                   <img 
-                    src="/images/logo.png" 
+                    src="/images/boot-logo.png" 
                     alt="Phantom Node" 
-                    className="w-72 h-auto object-contain"
+                    className="w-[576px] h-auto object-contain"
                     style={{ mixBlendMode: 'screen' }}
                     onError={() => setImageError(true)}
                   />

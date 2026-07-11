@@ -120,20 +120,20 @@ export default function AppIconTile({
         onContextMenu={onContextMenu}
         aria-label={label}
         title={label}
-        className={`group relative flex flex-col items-center justify-start p-2 w-[88px] h-[104px] rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-colors duration-100 ${
+        className={`group relative flex flex-col items-center justify-start p-2 w-[84px] h-[104px] rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-colors duration-100 ${
           isActive ? 'bg-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]' : 'hover:bg-white/[0.04]'
         }`}
       >
         {/* Inner icon plate (Darker blur for higher visibility) */}
-        <div className="relative flex items-center justify-center w-[52px] h-[52px] rounded-[14px] bg-black/30 backdrop-blur-md border border-white/10 shadow-sm mb-1.5 pointer-events-none drop-shadow-xl">
-          <div className="relative flex items-center justify-center w-8 h-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+        <div className="relative flex items-center justify-center w-[56px] h-[56px] rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 shadow-sm mb-2 pointer-events-none drop-shadow-xl overflow-hidden">
+          <div className="relative flex items-center justify-center w-[40px] h-[40px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
             {icon}
           </div>
         </div>
         
         {/* Label beneath */}
         <span 
-          className={`text-[11px] font-medium leading-[1.3] tracking-wide text-center line-clamp-2 w-full px-0.5 drop-shadow-md pointer-events-none ${
+          className={`text-[13px] font-medium leading-[1.3] tracking-wide text-center line-clamp-2 w-full px-0.5 drop-shadow-md pointer-events-none ${
             isActive ? 'text-white' : 'text-white/95 group-hover:text-white'
           }`}
           style={{ textShadow: '0 1px 4px rgba(0,0,0,1), 0 2px 8px rgba(0,0,0,0.8)' }}

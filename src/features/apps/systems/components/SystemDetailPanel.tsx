@@ -25,12 +25,12 @@ export const SystemDetailPanel: React.FC<SystemDetailPanelProps> = ({ system, cl
           </h2>
         </div>
         
-        <GlassPanel elevation="low" tint="accent" className="p-6 md:p-8">
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-text)]/60 mb-2">The Problem</h4>
-          <p className="text-lg text-[var(--color-text)]/90 leading-relaxed font-serif italic">
+        <div className="pl-6 border-l-2 border-[var(--color-accent)] mb-12">
+          <h4 className="text-sm font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">The Problem</h4>
+          <p className="text-xl md:text-2xl text-[var(--color-text)] leading-relaxed font-serif italic">
             "{system.fullProblem}"
           </p>
-        </GlassPanel>
+        </div>
       </div>
 
       {/* Interactive Workflow Diagram */}

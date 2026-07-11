@@ -2,14 +2,9 @@ import { ReactNode } from 'react';
 import FilesApp from '../apps/files/FilesApp';
 import NotepadApp from '../apps/notepad/NotepadApp';
 import SettingsApp from '../apps/settings/SettingsApp';
-import AboutApp from '../apps/about/AboutApp';
 import PdfViewerApp from '../apps/pdf-viewer/PdfViewerApp';
 import JsonViewerApp from '../apps/json-viewer/JsonViewerApp';
-import ContactApp from '../apps/contact/ContactApp';
-import ServicesApp from '../apps/services/ServicesApp';
-import HomeApp from '../apps/home/HomeApp';
-import WorkApp from '../apps/work/WorkApp';
-import { ProcessApp } from '../apps/process/ProcessApp';
+import StudioApp from '../apps/studio/StudioApp';
 import { WindowInstance } from './useWindowStore';
 
 export interface AppRegistryEntry {
@@ -28,30 +23,24 @@ export interface AppRegistryEntry {
 }
 
 export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
-  home: {
-    appId: 'home',
-    title: 'Studio',
-    defaultWidth: 860,
-    defaultHeight: 680,
+  'phantom-node-studio': {
+    appId: 'phantom-node-studio',
+    title: 'Phantom Node Studio',
+    defaultWidth: 1100,
+    defaultHeight: 750,
     defaultX: 100,
     defaultY: 50,
-    minWidth: 700,
+    minWidth: 800,
     minHeight: 500,
     storyMode: true,
-    render: (window) => <HomeApp window={window!} />
+    render: (window) => <StudioApp window={window!} />
   },
-  work: {
-    appId: 'work',
-    title: 'Work',
-    defaultWidth: 900,
-    defaultHeight: 700,
-    defaultX: 120,
-    defaultY: 60,
-    minWidth: 700,
-    minHeight: 500,
-    storyMode: true,
-    render: (window) => <WorkApp window={window!} />
-  },
+  home: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
+  work: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
+  services: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
+  process: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
+  contact: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
+  about: { appId: 'phantom-node-studio', title: 'Phantom Node Studio', defaultWidth: 1100, defaultHeight: 750, defaultX: 100, defaultY: 50, minWidth: 800, minHeight: 500, storyMode: true, render: (window) => <StudioApp window={window!} /> },
   files: {
     appId: 'files',
     title: 'Files',
@@ -131,17 +120,6 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
       </div>
     )
   },
-  about: {
-    appId: 'about',
-    title: 'About',
-    defaultWidth: 800,
-    defaultHeight: 560,
-    defaultX: 300,
-    defaultY: 200,
-    minWidth: 700,
-    minHeight: 400,
-    render: (window) => <AboutApp window={window!} />
-  },
   'recycle-bin': {
     appId: 'recycle-bin',
     title: 'Recycle Bin',
@@ -152,41 +130,5 @@ export const APP_REGISTRY: Record<string, AppRegistryEntry> = {
     minWidth: 400,
     minHeight: 300,
     render: () => <FilesApp initialFolderId="recycle-bin" />
-  },
-  contact: {
-    appId: 'contact',
-    title: 'Contact',
-    defaultWidth: 800,
-    defaultHeight: 620,
-    defaultX: 250,
-    defaultY: 100,
-    minWidth: 700,
-    minHeight: 500,
-    storyMode: true,
-    render: (window) => <ContactApp window={window!} />
-  },
-  services: {
-    appId: 'services',
-    title: 'Services',
-    defaultWidth: 860,
-    defaultHeight: 680,
-    defaultX: 180,
-    defaultY: 80,
-    minWidth: 700,
-    minHeight: 420,
-    storyMode: true,
-    render: (window) => <ServicesApp window={window!} />
-  },
-  process: {
-    appId: 'process',
-    title: 'Process',
-    defaultWidth: 860,
-    defaultHeight: 680,
-    defaultX: 190,
-    defaultY: 90,
-    minWidth: 700,
-    minHeight: 420,
-    storyMode: true,
-    render: () => <ProcessApp />
   }
 };

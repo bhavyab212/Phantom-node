@@ -7,10 +7,12 @@ export const WORK_PROJECTS: CaseStudy[] = [
     projectName: 'Digital Transformation & Patient Portal',
     clientName: 'Northstar Health',
     category: 'Web Design & Development',
-    tagline: 'Modernizing patient onboarding and increasing appointments.',
+    tagline: 'Digital Transformation & Patient Portal',
     headlineMetric: '42% faster page loads, 27% more qualified leads',
     year: 2025,
     duration: '12 weeks',
+    status: 'Completed',
+    impact: '+32%',
     heroMedia: { type: 'image', alt: 'Northstar Health Patient Portal Preview' },
     challenge: {
       title: 'Friction at the front door.',
@@ -68,11 +70,13 @@ export const WORK_PROJECTS: CaseStudy[] = [
     slug: 'atlas-automation',
     projectName: 'Operations Automation Engine',
     clientName: 'Atlas Logistics',
-    category: 'Growth & Marketing',
-    tagline: 'Eliminating manual data entry and accelerating operations.',
+    category: 'Automation & Integration',
+    tagline: 'Operations Automation Engine',
     headlineMetric: '18 hours saved per week on manual dispatch',
     year: 2026,
     duration: '8 weeks',
+    status: 'In Progress',
+    impact: '+28%',
     heroMedia: { type: 'image', alt: 'Atlas Automation Dashboard Preview' },
     challenge: {
       title: 'Drowning in manual processes.',
@@ -126,10 +130,12 @@ export const WORK_PROJECTS: CaseStudy[] = [
     projectName: 'Global Rebrand & Launch',
     clientName: 'Apex Financial',
     category: 'Branding & Identity',
-    tagline: 'Bridging legacy stability with modern accessibility.',
+    tagline: 'Global Rebrand & Launch',
     headlineMetric: '250% increase in social engagement post-launch',
     year: 2024,
     duration: '10 weeks',
+    status: 'Completed',
+    impact: '+41%',
     heroMedia: { type: 'image', alt: 'Apex Financial Rebrand Preview' },
     challenge: {
       title: 'An outdated perception of trust.',
@@ -181,5 +187,87 @@ export const WORK_PROJECTS: CaseStudy[] = [
     linkedFileIds: ['f-ap-brand-book', 'f-ap-logo-suite', 'f-ap-launch-deck'],
     featured: false,
     sortOrder: 3
+  },
+  {
+    id: 'cs-vertex',
+    slug: 'vertex-commerce',
+    projectName: 'E-commerce Platform Redesign',
+    clientName: 'Vertex Commerce',
+    category: 'Web Design & Dev',
+    tagline: 'E-commerce Platform Redesign',
+    headlineMetric: '35% increase in conversion rate',
+    year: 2024,
+    duration: '14 weeks',
+    status: 'Completed',
+    impact: '+35%',
+    heroMedia: { type: 'image', alt: 'Vertex Commerce Preview' },
+    challenge: {
+      title: 'A high-friction checkout experience.',
+      body: 'Cart abandonment was at an all-time high due to a confusing, multi-step checkout process.'
+    },
+    strategy: {
+      title: 'Streamlined purchasing journey.',
+      body: 'Redesigned the entire e-commerce flow with a focus on a one-page checkout and clear product discovery.',
+      keyPoints: []
+    },
+    execution: {
+      title: 'Implementation',
+      body: 'Built on Shopify Plus with a custom headless storefront.',
+      deliverables: []
+    },
+    results: {
+      title: 'Significant conversion lift.',
+      body: 'Increased conversions significantly while reducing support tickets.'
+    },
+    metrics: [],
+    timeline: [],
+    testimonial: null,
+    gallery: [],
+    serviceIntent: 'idx-srv-web',
+    linkedFileFolderId: 'f-portfolio-4',
+    linkedFileIds: [],
+    featured: false,
+    sortOrder: 4
+  },
+  {
+    id: 'cs-nova',
+    slug: 'nova-energy',
+    projectName: 'Marketing & Growth Campaign',
+    clientName: 'Nova Energy',
+    category: 'Growth & Marketing',
+    tagline: 'Marketing & Growth Campaign',
+    headlineMetric: '18% increase in market share',
+    year: 2025,
+    duration: '12 weeks',
+    status: 'In Progress',
+    impact: '+18%',
+    heroMedia: { type: 'image', alt: 'Nova Energy Preview' },
+    challenge: {
+      title: 'Low brand awareness.',
+      body: 'Entering a crowded market required a standout campaign.'
+    },
+    strategy: {
+      title: 'Targeted digital campaigns.',
+      body: 'Leveraged performance marketing and targeted social media campaigns.',
+      keyPoints: []
+    },
+    execution: {
+      title: 'Campaign rollout.',
+      body: 'Launched multi-channel campaigns across digital platforms.',
+      deliverables: []
+    },
+    results: {
+      title: 'Market share growth.',
+      body: 'Rapidly gained market share and brand recognition.'
+    },
+    metrics: [],
+    timeline: [],
+    testimonial: null,
+    gallery: [],
+    serviceIntent: 'idx-srv-growth',
+    linkedFileFolderId: 'f-portfolio-5',
+    linkedFileIds: [],
+    featured: false,
+    sortOrder: 5
   }
 ];

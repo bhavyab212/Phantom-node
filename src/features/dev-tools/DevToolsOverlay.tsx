@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDesktopPreferences } from '../system/useDesktopPreferences';
 import { useWidgetStore } from '../desktop-widgets/useWidgetStore';
+import { useWindowStore } from '../window-manager/useWindowStore';
 import { useInspector } from './useInspector';
 
 interface DevSection {
@@ -12,6 +13,7 @@ interface DevSection {
   target: string;
   icon: string;
   fields: DevField[];
+  appId?: string;
 }
 
 interface DevField {
@@ -64,9 +66,12 @@ export function DevToolsOverlay() {
     desktopZoom, setDesktopZoom,
     accentColor, setAccentColor,
     taskbarAutoHide, setTaskbarAutoHide,
+    enableWindowResizing, setEnableWindowResizing,
+    windowPlacementStrategy, setWindowPlacementStrategy,
   } = useDesktopPreferences();
 
   const resetWidgetLayouts = useWidgetStore((s) => s.resetWidgetLayouts);
+  const { windows, updateWindowSize, updateWindowPosition } = useWindowStore();
 
   // ── Sections definition ─────────────────────────────────────────────────────
   const sections: DevSection[] = [
@@ -131,6 +136,24 @@ export function DevToolsOverlay() {
         },
       ],
     },
+    {
+      id: 'windowPreferences',
+      label: 'Window Preferences',
+      target: 'windowPreferences',
+      icon: '🪟',
+      fields: [
+        {
+          key: 'enableWindowResizing', label: 'Enable Resizing', type: 'boolean',
+          getValue: () => enableWindowResizing,
+          setValue: (v: boolean) => setEnableWindowResizing(v),
+        },
+        {
+          key: 'windowPlacementStrategy', label: 'Cascade Windows', type: 'boolean',
+          getValue: () => windowPlacementStrategy === 'cascade',
+          setValue: (v: boolean) => setWindowPlacementStrategy(v ? 'cascade' : 'center'),
+        }
+      ]
+    },
   ];
 
   // Filter sections if a specific target is inspected
@@ -139,9 +162,46 @@ export function DevToolsOverlay() {
         if (inspectedTargetId === 'taskbar' && s.id === 'desktopPreferences') return true;
         if (inspectedTargetId === 'desktop' && s.id === 'desktopPreferences') return true;
         if (inspectedTargetId.startsWith('w-') && s.id === 'widgetLayout') return true;
+        if (inspectedTargetId.startsWith('window-') && s.id === 'windowPreferences') return true;
         return false;
       })
     : sections;
+
+  if (inspectedTargetId && inspectedTargetId.startsWith('window-')) {
+    const instanceId = inspectedTargetId.replace('window-', '');
+    const inspectedWindow = windows.find(w => w.instanceId === instanceId);
+    if (inspectedWindow) {
+      visibleSections.unshift({
+        id: 'windowRegistry',
+        label: `Default Size: ${inspectedWindow.appId}`,
+        target: 'windowRegistry',
+        icon: '📐',
+        appId: inspectedWindow.appId,
+        fields: [
+          {
+            key: 'defaultWidth', label: 'Default Width', type: 'range', min: 300, max: 2000, step: 10,
+            getValue: () => inspectedWindow.width,
+            setValue: (v: number) => updateWindowSize(inspectedWindow.instanceId, v, inspectedWindow.height),
+          },
+          {
+            key: 'defaultHeight', label: 'Default Height', type: 'range', min: 300, max: 2000, step: 10,
+            getValue: () => inspectedWindow.height,
+            setValue: (v: number) => updateWindowSize(inspectedWindow.instanceId, inspectedWindow.width, v),
+          },
+          {
+            key: 'defaultX', label: 'Default X', type: 'range', min: 0, max: 2000, step: 10,
+            getValue: () => inspectedWindow.x,
+            setValue: (v: number) => updateWindowPosition(inspectedWindow.instanceId, v, inspectedWindow.y),
+          },
+          {
+            key: 'defaultY', label: 'Default Y', type: 'range', min: 0, max: 2000, step: 10,
+            getValue: () => inspectedWindow.y,
+            setValue: (v: number) => updateWindowPosition(inspectedWindow.instanceId, inspectedWindow.x, v),
+          },
+        ]
+      });
+    }
+  }
 
   // Fallback if filter matches nothing
   const displaySections = visibleSections.length > 0 ? visibleSections : sections;
@@ -155,10 +215,18 @@ export function DevToolsOverlay() {
       for (const field of section.fields) {
         patches[field.key] = field.getValue() as any;
       }
+      
+      let body: any = { target: section.target };
+      if (section.target === 'windowRegistry' && section.appId) {
+        body.windowRegistryOverride = { appId: section.appId, patches };
+      } else {
+        body.patches = patches;
+      }
+
       const res = await fetch('/api/dev-tools', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ target: section.target, patches }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       setHardcodeResult(data);
