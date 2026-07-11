@@ -84,8 +84,9 @@ export default function ServicesApp({ window: windowInstance }: ServicesAppProps
               <button 
                 key={service.id}
                 onClick={() => setActiveServiceId(service.id)} 
-                className="group flex flex-col text-left bg-white border border-gray-100 rounded-[20px] p-8 hover:-translate-y-1 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+                className="group flex flex-col text-left bg-white border border-gray-100 rounded-[20px] hover:-translate-y-4 hover:scale-[1.05] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] hover:z-20 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.04)] magic-card"
               >
+                <div className="flex flex-col relative z-10 bg-white rounded-[inherit] overflow-hidden w-full h-full p-8">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-xl font-bold text-gray-900 group-hover:text-yellow-500 transition-colors">
                     {service.title}
@@ -100,6 +101,7 @@ export default function ServicesApp({ window: windowInstance }: ServicesAppProps
                   <span className="text-gray-400 flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-300" /> {service.timelineEstimate}
                   </span>
+                </div>
                 </div>
               </button>
             ))}

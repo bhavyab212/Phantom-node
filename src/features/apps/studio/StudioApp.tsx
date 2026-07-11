@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { WindowInstance, useWindowStore } from '../../window-manager/useWindowStore';
 import { NativeAppShell, SidebarGroup, SidebarItem } from '../../ui/NativeAppShell';
-import { LayoutGrid, Activity, Layers, Briefcase, GitMerge, Mail, ArrowRight, CheckCircle2, Users, Star } from 'lucide-react';
+import { LayoutGrid, Activity, Layers, Briefcase, GitMerge, Mail, ArrowRight, CheckCircle2, Users, Star, Workflow } from 'lucide-react';
 
 import WorkApp from '../work/WorkApp';
 import ServicesApp from '../services/ServicesApp';
 import { ProcessApp } from '../process/ProcessApp';
 import { ContactApp } from '../contact/ContactApp';
 import AboutApp from '../about/AboutApp';
+import AutomationsApp from '../automations/AutomationsApp';
 
 interface StudioAppProps {
   window: WindowInstance;
@@ -38,6 +39,7 @@ export default function StudioApp({ window: windowInstance }: StudioAppProps) {
       <SidebarGroup title="AGENCY APPS">
         <SidebarItem icon={Layers} label="Work" isActive={activeTab === 'work'} onClick={() => setTab('work')} />
         <SidebarItem icon={Briefcase} label="Services" isActive={activeTab === 'services'} onClick={() => setTab('services')} />
+        <SidebarItem icon={Workflow} label="Automations" isActive={activeTab === 'automations'} onClick={() => setTab('automations')} />
         <SidebarItem icon={GitMerge} label="Process" isActive={activeTab === 'process'} onClick={() => setTab('process')} />
         <SidebarItem icon={Star} label="Results" isActive={activeTab === 'results'} onClick={() => setTab('results')} />
       </SidebarGroup>
@@ -53,6 +55,7 @@ export default function StudioApp({ window: windowInstance }: StudioAppProps) {
   let content;
   
   if (activeTab === 'services') content = <ServicesApp window={windowInstance} />;
+  else if (activeTab === 'automations') content = <AutomationsApp window={windowInstance} />;
   else if (activeTab === 'process') content = <ProcessApp />;
   else if (activeTab === 'contact') content = <ContactApp />;
   else if (activeTab === 'results') content = <AboutApp window={windowInstance} />;
