@@ -56,11 +56,36 @@ export const DIMENSION_MAPS: Record<string, string[]> = {
   ]
 };
 
-const DEFAULT_OPTIONS = [
-  { label: 'Option A', value: 'Option A' },
-  { label: 'Option B', value: 'Option B' },
-  { label: 'Option C', value: 'Option C' }
-];
+const FALLBACK_OPTIONS: Record<string, string[]> = {
+  'what they want help with': ['Automate a repetitive process', 'Build a custom tool or integration', 'Improve an existing workflow', 'Set up an AI assistant', "I'm not sure yet"],
+  'where the friction is': ['Sales or lead management', 'Operations and admin tasks', 'Customer support', 'Data entry and reporting'],
+  'how they handle it today': ['Mostly manually', 'With spreadsheets', 'Disconnected tools patched together', 'A mix of all of these'],
+  'what outcome matters': ['Save time for my team', 'Fewer errors and missed steps', 'Faster response times', 'Better visibility across the process'],
+  'how urgent it is': ['As soon as possible', 'Within the next month', 'This quarter', 'Just exploring right now'],
+  'anything custom / constraint': ['Budget constraints', 'Specific timeline', 'Must use existing tools', 'No major constraints'],
+  'primary site goal': ['Generate more qualified leads', 'Build brand credibility', 'Sell products or services online', 'Provide information to clients'],
+  'page priority': ['Homepage', 'Services or product pages', 'About us', 'Contact page'],
+  'audience': ['Business clients (B2B)', 'Direct consumers (B2C)', 'Investors or partners', 'Internal team'],
+  'content / brand readiness': ['Brand and content fully ready', 'Have branding, need content help', 'Need both branding and content', 'Starting from scratch'],
+  'conversion path': ['Book a call or demo', 'Submit an enquiry form', 'Purchase directly', 'Sign up for updates'],
+  'launch timing or constraints': ['Launch ASAP', 'Within 4–6 weeks', 'Within 3 months', 'No fixed deadline'],
+  'workflow to improve': ['Lead intake and qualification', 'Client onboarding', 'Reporting and data aggregation', 'Internal operations'],
+  'current bottleneck': ['Too much manual data entry', 'Waiting on approvals', 'Handoffs between people or tools', 'Finding information takes too long'],
+  'tools involved': ['CRM (e.g. HubSpot, Salesforce)', 'Email and calendar (e.g. Gmail, Outlook)', 'Spreadsheets (e.g. Google Sheets, Excel)', 'Project management (e.g. Notion, Asana)'],
+  'ownership / handoff': ['Just me', 'A small team', 'Multiple departments', 'External partners or contractors'],
+  'desired outcome': ['Save significant team time', 'Reduce errors and rework', 'Scale the process without hiring', 'Full visibility into the workflow'],
+  'exceptions / constraints': ['Must work within existing tech stack', 'Tight budget', 'Compliance or data privacy requirements', 'No major constraints'],
+  'break point': ['After the first inquiry comes in', 'After a sales call or demo', 'After a proposal is sent', 'After a period of no response'],
+  'main channel': ['Email', 'WhatsApp or SMS', 'Phone calls', 'CRM tasks and reminders'],
+  'desired improvement': ['Faster follow-up speed', 'More consistent messaging', 'Better personalisation', 'Full visibility into follow-up status'],
+  'stop / pause condition': ['When they reply', 'After a set number of attempts', 'When they book a call', 'When deal is marked won/lost'],
+  'CRM or handoff expectation': ['Update the deal status automatically', 'Create a task for a team member', 'Log all activity in the CRM', 'No CRM involvement needed'],
+  'stage needing support': ['Lead qualification', 'Sending proposals', 'Following up after demos', 'Scheduling meetings'],
+  'qualification logic': ['Budget fit', 'Timeline and urgency', 'Decision-maker involvement', 'Specific need or use case'],
+  'next-step action': ['Book a discovery call', 'Send a tailored proposal', 'Route to a sales rep', 'Add to a nurture sequence'],
+  'system / CRM involved': ['HubSpot', 'Salesforce', 'Pipedrive', 'Custom or in-house CRM'],
+  'human handoff boundary': ['For complex or sensitive questions', 'To close the deal', 'For pricing discussions', 'Immediately — AI just qualifies']
+};
 
 export const FALLBACK_TEMPLATES: Record<string, string> = {
   'what they want help with': 'What do you primarily need help with?',
@@ -114,6 +139,7 @@ export function getNextTargetDimension(sourceType: string, sourceId: string | un
 
 export function getFallbackQuestion(dimension: string, sourceId: string, sourceTitle: string): Question {
   const text = FALLBACK_TEMPLATES[dimension] || 'What is the next step for this project?';
+  const opts = FALLBACK_OPTIONS[dimension] || ['Yes, this fits well', 'Partially — needs discussion', 'Not quite — let me explain'];
   return {
     id: `dim-${dimension.replace(/\s+/g, '-')}`,
     dimension,
@@ -123,7 +149,7 @@ export function getFallbackQuestion(dimension: string, sourceId: string, sourceT
     type: 'select',
     required: true,
     answerMode: 'single-select-or-custom',
-    options: DEFAULT_OPTIONS
+    options: opts.map(o => ({ label: o, value: o }))
   };
 }
 

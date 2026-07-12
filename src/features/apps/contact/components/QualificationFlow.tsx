@@ -52,53 +52,55 @@ export const QualificationFlow: React.FC = () => {
     const actualDimension = getNextTargetDimension(sourceType, sourceId || undefined, count) || targetDimension;
     const fallback = getFallbackQuestion(actualDimension, sourceId || 'direct', sourceTitle || 'Direct');
     
-    if (consentGranted) {
-      try {
-        const payload = {
-          sourceType,
-          sourceId: sourceId || 'direct',
-          sourceTitle,
-          flowStage: count === 0 ? 'start' : count >= 4 ? 'end' : 'mid',
-          stepNumber: count + 1,
-          maxSteps: 6,
-          alreadyCoveredDimensions: answeredQuestionIds.map(id => id.replace(/^dim-/, '').replace(/-/g, ' ')),
-          nextTargetDimension: actualDimension,
-          previousAnswers: Object.entries(answers).map(([k, v]) => ({ 
-            question: getQuestionById(k)?.text || k, 
-            answer: v 
-          }))
-        };
-        
-        const res = await fetch('/api/contact/generate-question', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        
-        if (res.ok) {
-          const data = await res.json();
-          if (data.question && data.options) {
-            registerDynamicQuestion({
-              id: fallback.id,
-              sourceId: fallback.sourceId,
-              sourceTitle: fallback.sourceTitle,
-              text: data.question,
-              type: 'select',
-              required: true,
-              answerMode: 'single-select-or-custom',
-              options: data.options.map((o: string) => ({ label: o, value: o })),
-              dimension: actualDimension
-            });
-            setNextQuestion(fallback.id);
-            return;
-          }
+    // Always try AI — consent only controls whether personalization (prior session data) is included
+    try {
+      const payload = {
+        sourceType,
+        sourceId: sourceId || 'direct',
+        sourceTitle,
+        flowStage: count === 0 ? 'start' : count >= 4 ? 'end' : 'mid',
+        stepNumber: count + 1,
+        maxSteps: 6,
+        alreadyCoveredDimensions: answeredQuestionIds.map(id => id.replace(/^dim-/, '').replace(/-/g, ' ')),
+        nextTargetDimension: actualDimension,
+        // Only include prior answers if consent was granted
+        previousAnswers: consentGranted 
+          ? Object.entries(answers).map(([k, v]) => ({ 
+              question: getQuestionById(k)?.text || k, 
+              answer: v 
+            }))
+          : []
+      };
+      
+      const res = await fetch('/api/contact/generate-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        if (data.question && data.options) {
+          registerDynamicQuestion({
+            id: fallback.id,
+            sourceId: fallback.sourceId,
+            sourceTitle: fallback.sourceTitle,
+            text: data.question,
+            type: 'select',
+            required: true,
+            answerMode: 'single-select-or-custom',
+            options: data.options.map((o: string) => ({ label: o, value: o })),
+            dimension: actualDimension
+          });
+          setNextQuestion(fallback.id);
+          return;
         }
-      } catch (e) {
-        console.error('AI Generation Failed, using fallback', e);
       }
+    } catch (e) {
+      console.error('AI Generation Failed, using fallback', e);
     }
     
-    // Fallback
+    // Fallback with real options from FALLBACK_TEMPLATES
     registerDynamicQuestion(fallback);
     setNextQuestion(fallback.id);
   };
@@ -230,7 +232,7 @@ export const QualificationFlow: React.FC = () => {
           )}
           <div className="flex items-center gap-2">
             <span className="text-sm font-bold text-gray-400">
-              {answeredQuestionIds.length} / 7
+              {answeredQuestionIds.length + 1} / {(sourceType === 'automation') ? 5 : 6}
             </span>
           </div>
         </div>

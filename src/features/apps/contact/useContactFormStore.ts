@@ -160,7 +160,7 @@ export const useContactFormStore = create<ContactFormState>((set, get) => ({
       sourceType,
       sourceId,
       sourceTitle,
-      consentGranted: context?.consent?.localPersonalization || false,
+      consentGranted: context?.consent?.localPersonalization ?? true,
       currentQuestionId: entryId,
       history: []
     }));
