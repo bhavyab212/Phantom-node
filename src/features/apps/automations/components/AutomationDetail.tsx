@@ -23,7 +23,7 @@ export function AutomationDetail({ automation, onBack, windowInstance }: Automat
   };
 
   const handleDiscuss = () => {
-    openApp('contact', 'Contact', {}, { initialIntent: `Automation: ${automation.title}` });
+    openApp('contact', 'Contact', {}, { sourceType: 'automation', sourceId: automation.id, sourceTitle: automation.title });
   };
 
   return (

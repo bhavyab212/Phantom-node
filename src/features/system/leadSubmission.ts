@@ -1,6 +1,6 @@
 import { ContactFormData } from '../apps/contact/useContactFormStore';
 
-export async function submitLead(data: ContactFormData): Promise<{ success: boolean; message: string }> {
+export async function submitLead(data: any): Promise<{ success: boolean; message: string }> {
   // Simulate network latency (600-900ms)
   const delay = Math.floor(Math.random() * 300) + 600;
   

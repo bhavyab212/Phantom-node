@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Check, Clock, DollarSign, Users } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Clock, Banknote, Users } from 'lucide-react';
 import { Service } from '../services-data';
 import { useWindowStore } from '../../../window-manager/useWindowStore';
 import { useContactFormStore } from '../../contact/useContactFormStore';
@@ -12,7 +12,7 @@ interface ServiceDetailViewProps {
 
 export default function ServiceDetailView({ service, onBack }: ServiceDetailViewProps) {
   const { windows, openApp, focusWindow, restoreWindow } = useWindowStore();
-  const contactStep = useContactFormStore(s => s.currentStep);
+  const answeredQuestionIds = useContactFormStore(s => s.answeredQuestionIds);
 
   const handleGetQuote = () => {
     const contactEntry = APP_REGISTRY['contact'];
@@ -21,8 +21,8 @@ export default function ServiceDetailView({ service, onBack }: ServiceDetailView
     const existingContact = windows.find(w => w.appId === 'contact');
 
     if (existingContact) {
-      // Contact is already open — check if user is still on step 1
-      const isOnStep1 = contactStep === 1;
+      // Contact is already open — check if user has not answered any questions yet (step 1)
+      const isOnStep1 = answeredQuestionIds.length === 0;
 
       if (isOnStep1) {
         // Safe to update intent — pass new initialIntent through fileContext
@@ -97,9 +97,9 @@ export default function ServiceDetailView({ service, onBack }: ServiceDetailView
 
         {/* Metadata pills */}
         <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8">
-            <DollarSign size={13} className="text-white/50" />
-            <span className="text-sm font-medium text-white/80">{service.priceLabel}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+            <Banknote size={13} className="text-white/50" />
+            <span className="text-sm font-medium text-white/80 whitespace-nowrap">{service.priceLabel}</span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8">
             <Clock size={13} className="text-white/50" />

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Clock, DollarSign } from 'lucide-react';
+import { ArrowRight, Clock, Banknote } from 'lucide-react';
 import { Service } from '../services-data';
 
 interface ServiceCardProps {
@@ -56,9 +56,9 @@ export default function ServiceCard({ service, onClick, index }: ServiceCardProp
 
       {/* Metadata row */}
       <div className="flex items-center gap-4 flex-wrap">
-        <div className="flex items-center gap-1.5">
-          <DollarSign size={12} className="text-white/35 flex-shrink-0" />
-          <span className="text-xs font-medium text-white/60">{service.priceLabel}</span>
+        <div className="flex items-center gap-1.5 flex-1 justify-end min-w-0">
+          <Banknote size={12} className="text-white/35 flex-shrink-0" />
+          <span className="text-xs font-medium text-white/60 truncate">{service.priceLabel}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <Clock size={12} className="text-white/35 flex-shrink-0" />

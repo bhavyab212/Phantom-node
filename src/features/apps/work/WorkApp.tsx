@@ -67,8 +67,11 @@ export default function WorkApp({ window: windowInstance, onHome }: WorkAppProps
   const userProfileWidget = (
     <div className="mt-4 flex items-center justify-between p-3 rounded-2xl hover:bg-white/5 transition-colors cursor-pointer border border-transparent hover:border-white/10 group">
        <div className="flex items-center gap-3">
-         <div className="w-9 h-9 rounded-full bg-yellow-500 flex items-center justify-center text-black font-bold text-xs shrink-0 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
-           PN
+         <div className="relative w-9 h-9 flex items-center justify-center shrink-0">
+           <div className="absolute inset-0 rounded-full border-[2.2px] border-transparent border-t-[#facc15] border-b-[#facc15] rotate-45" />
+           <div className="w-[82%] h-[82%] rounded-full bg-[#111] flex items-center justify-center text-[#facc15] font-bold text-[10px] tracking-wider">
+             PN
+           </div>
          </div>
          <div className="flex flex-col">
            <span className="text-[13px] font-semibold text-white/90 group-hover:text-white transition-colors">Phantom Node</span>

@@ -1,0 +1,284 @@
+{
+  "records": [
+    {
+      "dimension": "what they want help with",
+      "hoverTitle": "Why we ask this",
+      "about": "Understanding your primary goal helps us focus the conversation.",
+      "detail": "Whether it's a completely new system or fixing an existing one, knowing your focus saves time.",
+      "whatGoodAnswerLooksLike": "Specific details about what isn't working or what you want to achieve.",
+      "exampleAnswer": "We need to rebuild our lead capture flow because it's dropping 40% of leads.",
+      "uiHint": "Be as specific as possible.",
+      "privacyNote": "Your data is only used for this session."
+    },
+    {
+      "dimension": "where the friction is",
+      "hoverTitle": "Identifying Friction",
+      "about": "Friction points are where systems break down or users drop off.",
+      "detail": "Locating the exact point of failure helps us prescribe the right technical fix.",
+      "whatGoodAnswerLooksLike": "A description of the step where users get stuck or where manual work piles up.",
+      "exampleAnswer": "Users drop off when asked to upload their documents.",
+      "uiHint": "Focus on the pain point.",
+      "privacyNote": "Your data is only used for this session."
+    },
+    {
+      "dimension": "how they handle it today",
+      "hoverTitle": "Current Process",
+      "about": "Knowing your current process helps us design a solution that fits your team.",
+      "detail": "Even if the current process is a messy spreadsheet, it tells us how data flows.",
+      "whatGoodAnswerLooksLike": "A brief outline of the manual steps or tools currently used.",
+      "exampleAnswer": "We manually copy leads from email into a Google Sheet.",
+      "uiHint": "Describe the manual steps.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "what outcome matters",
+      "hoverTitle": "Defining Success",
+      "about": "We need to know what a successful engagement looks like to you.",
+      "detail": "Success could be time saved, conversion rate increased, or revenue generated.",
+      "whatGoodAnswerLooksLike": "A measurable goal or specific qualitative change.",
+      "exampleAnswer": "Reduce manual data entry by 10 hours a week.",
+      "uiHint": "Think about metrics.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "how urgent it is",
+      "hoverTitle": "Timeline",
+      "about": "Understanding your timeline helps us allocate resources.",
+      "detail": "If you have a hard deadline, we can adjust the project scope to meet it.",
+      "whatGoodAnswerLooksLike": "A specific date or relative timeframe (e.g., Q3).",
+      "exampleAnswer": "We need this live before our busy season in October.",
+      "uiHint": "Be realistic.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "anything custom / constraint",
+      "hoverTitle": "Constraints",
+      "about": "Custom requirements or constraints shape the technical architecture.",
+      "detail": "Constraints could be legacy software, compliance rules, or budget caps.",
+      "whatGoodAnswerLooksLike": "Specific tools we must integrate with or rules we must follow.",
+      "exampleAnswer": "It must integrate with our legacy on-premise ERP system.",
+      "uiHint": "List any dealbreakers.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "primary site goal",
+      "hoverTitle": "Site Purpose",
+      "about": "The primary goal of a website dictates its structure and design.",
+      "detail": "A lead-gen site looks very different from an e-commerce or portfolio site.",
+      "whatGoodAnswerLooksLike": "The main action you want a visitor to take.",
+      "exampleAnswer": "We want visitors to book a consultation call.",
+      "uiHint": "Focus on the primary action.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "page priority",
+      "hoverTitle": "Key Pages",
+      "about": "Identifying high-priority pages helps us sequence the design work.",
+      "detail": "We usually focus on the homepage and core conversion pages first.",
+      "whatGoodAnswerLooksLike": "A list of the 2-3 most important pages.",
+      "exampleAnswer": "Homepage, Services overview, and the contact form.",
+      "uiHint": "What pages drive revenue?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "audience",
+      "hoverTitle": "Target Audience",
+      "about": "Design and copy must speak directly to your target audience.",
+      "detail": "B2B enterprise buyers need a different experience than B2C consumers.",
+      "whatGoodAnswerLooksLike": "A description of the typical user, their role, or their mindset.",
+      "exampleAnswer": "Enterprise IT directors looking for compliance solutions.",
+      "uiHint": "Who is buying?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "content / brand readiness",
+      "hoverTitle": "Asset Readiness",
+      "about": "Knowing what assets exist helps us plan the project timeline.",
+      "detail": "If you need branding or copywriting, we must build that into the schedule.",
+      "whatGoodAnswerLooksLike": "A clear status of your logo, brand guidelines, and copy.",
+      "exampleAnswer": "We have a logo, but we need help writing the website copy.",
+      "uiHint": "Be honest about what is ready.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "conversion path",
+      "hoverTitle": "User Journey",
+      "about": "The conversion path is how a user gets from landing to taking action.",
+      "detail": "We design funnels to reduce friction along this specific path.",
+      "whatGoodAnswerLooksLike": "The steps a user takes to convert.",
+      "exampleAnswer": "Landing page -> Service details -> Pricing -> Booking widget.",
+      "uiHint": "Map the ideal journey.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "launch timing or constraints",
+      "hoverTitle": "Deadlines",
+      "about": "Launch constraints help us scope the minimum viable product (MVP).",
+      "detail": "If the deadline is tight, we might propose launching in phases.",
+      "whatGoodAnswerLooksLike": "A hard date or event you are targeting.",
+      "exampleAnswer": "We need the MVP live by the industry conference on Nov 12.",
+      "uiHint": "Is there a hard deadline?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "workflow to improve",
+      "hoverTitle": "Target Workflow",
+      "about": "Identifying the specific workflow keeps the automation focused.",
+      "detail": "Trying to automate everything at once usually fails. We start with one flow.",
+      "whatGoodAnswerLooksLike": "A clear description of the process from start to finish.",
+      "exampleAnswer": "Our employee onboarding process from offer acceptance to day one.",
+      "uiHint": "Pick one core workflow.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "current bottleneck",
+      "hoverTitle": "The Bottleneck",
+      "about": "The bottleneck is the slowest or most error-prone part of the workflow.",
+      "detail": "Automating the bottleneck yields the highest return on investment.",
+      "whatGoodAnswerLooksLike": "The specific step that takes the most time or causes delays.",
+      "exampleAnswer": "Getting IT to provision software accounts takes 3 days.",
+      "uiHint": "Where do things slow down?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "tools involved",
+      "hoverTitle": "Software Stack",
+      "about": "We need to know your tech stack to plan API integrations.",
+      "detail": "If a tool lacks an API, we may need to use workarounds or suggest alternatives.",
+      "whatGoodAnswerLooksLike": "A list of the software used in this specific workflow.",
+      "exampleAnswer": "Salesforce, DocuSign, Slack, and Google Workspace.",
+      "uiHint": "List the tools you use.",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "ownership / handoff",
+      "hoverTitle": "Process Ownership",
+      "about": "Automations often break at the handoff between departments.",
+      "detail": "We need to know who is responsible for the data at each stage.",
+      "whatGoodAnswerLooksLike": "Roles or departments involved in the workflow.",
+      "exampleAnswer": "Sales closes the deal, then hands off to Customer Success via Jira.",
+      "uiHint": "Who does what?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "desired outcome",
+      "hoverTitle": "Automation Goal",
+      "about": "The desired outcome dictates how we build the automation logic.",
+      "detail": "Are we optimizing for speed, accuracy, or cost reduction?",
+      "whatGoodAnswerLooksLike": "The specific result you want the automation to achieve.",
+      "exampleAnswer": "Automatically provision accounts within 5 minutes of offer signing.",
+      "uiHint": "What does success look like?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "exceptions / constraints",
+      "hoverTitle": "Edge Cases",
+      "about": "Exceptions are the 'what ifs' that break simple automations.",
+      "detail": "We build error handling and human-in-the-loop steps for these edge cases.",
+      "whatGoodAnswerLooksLike": "Scenarios where the standard workflow doesn't apply.",
+      "exampleAnswer": "If they are an international hire, we need a manual review step.",
+      "uiHint": "What breaks the normal flow?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "break point",
+      "hoverTitle": "Follow-up Failures",
+      "about": "Identifying where follow-ups stop helps us build safety nets.",
+      "detail": "Follow-ups often break when sales reps get busy or leads go cold.",
+      "whatGoodAnswerLooksLike": "The stage where leads are most commonly forgotten.",
+      "exampleAnswer": "After the first demo, if they don't reply in 3 days, they get lost.",
+      "uiHint": "Where do leads drop?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "main channel",
+      "hoverTitle": "Communication Channel",
+      "about": "The channel dictates the tone and technical implementation.",
+      "detail": "Email is different from SMS or WhatsApp in terms of compliance and format.",
+      "whatGoodAnswerLooksLike": "The primary way you want to contact these leads.",
+      "exampleAnswer": "We want to follow up primarily via SMS.",
+      "uiHint": "Email, SMS, or Call?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "desired improvement",
+      "hoverTitle": "System Goals",
+      "about": "What exactly do you want the follow-up system to achieve?",
+      "detail": "This could be re-engaging old leads or ensuring 100% SLA compliance.",
+      "whatGoodAnswerLooksLike": "A measurable goal for the follow-up process.",
+      "exampleAnswer": "Increase our demo-to-close rate by ensuring 5 touchpoints minimum.",
+      "uiHint": "What is the goal?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "stop / pause condition",
+      "hoverTitle": "Stopping Automation",
+      "about": "Automated follow-ups must stop when a lead replies to avoid sounding robotic.",
+      "detail": "We need to know what constitutes a reply (email, call, meeting booked).",
+      "whatGoodAnswerLooksLike": "The action that should halt the automated sequence.",
+      "exampleAnswer": "Stop the sequence if they reply to the email or book a Calendly slot.",
+      "uiHint": "When should we stop?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "CRM or handoff expectation",
+      "hoverTitle": "CRM Integration",
+      "about": "Follow-up activity must be logged so humans have context.",
+      "detail": "We ensure the automation logs notes or changes lead statuses appropriately.",
+      "whatGoodAnswerLooksLike": "How you want the activity recorded in your CRM.",
+      "exampleAnswer": "Log all SMS messages as tasks in HubSpot and alert the owner.",
+      "uiHint": "How should we log this?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "stage needing support",
+      "hoverTitle": "AI Agent Role",
+      "about": "AI sales agents are best deployed at specific funnel stages.",
+      "detail": "Usually this is top-of-funnel qualification or mid-funnel re-engagement.",
+      "whatGoodAnswerLooksLike": "The part of the funnel you want the AI to handle.",
+      "exampleAnswer": "Qualifying inbound leads before they can book a demo.",
+      "uiHint": "Where will the AI work?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "qualification logic",
+      "hoverTitle": "Qualification Rules",
+      "about": "The AI needs clear rules to separate good leads from bad ones.",
+      "detail": "We translate your BANT (Budget, Authority, Need, Timeline) into AI logic.",
+      "whatGoodAnswerLooksLike": "The specific criteria a lead must meet to be considered qualified.",
+      "exampleAnswer": "They must have a budget over $5k and a timeline under 3 months.",
+      "uiHint": "What makes a good lead?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "next-step action",
+      "hoverTitle": "The Goal Action",
+      "about": "What should the AI try to get the user to do?",
+      "detail": "The AI needs a singular goal, like pushing a calendar link.",
+      "whatGoodAnswerLooksLike": "The specific call to action.",
+      "exampleAnswer": "Get them to book a time on the Account Executive's calendar.",
+      "uiHint": "What is the CTA?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "system / CRM involved",
+      "hoverTitle": "Tech Integration",
+      "about": "The AI agent must read and write to your existing systems.",
+      "detail": "We need to connect the agent to your CRM to log transcripts and update fields.",
+      "whatGoodAnswerLooksLike": "The CRM and communication tools involved.",
+      "exampleAnswer": "HubSpot for CRM and Intercom for the website chat.",
+      "uiHint": "What tools are we connecting?",
+      "privacyNote": ""
+    },
+    {
+      "dimension": "human handoff boundary",
+      "hoverTitle": "The Handoff",
+      "about": "AI should seamlessly hand off to a human when things get complex.",
+      "detail": "We set rules for when the AI should step back (e.g., pricing disputes, anger).",
+      "whatGoodAnswerLooksLike": "The triggers that require human intervention.",
+      "exampleAnswer": "If they ask for a custom discount or get frustrated, alert a human.",
+      "uiHint": "When should humans take over?",
+      "privacyNote": ""
+    }
+  ]
+}

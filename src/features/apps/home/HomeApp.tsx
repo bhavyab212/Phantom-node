@@ -155,7 +155,7 @@ export default function HomeApp({ window }: HomeAppProps) {
             {/* Wave image background */}
             <div className="absolute inset-0 z-0 opacity-50 transition-opacity group-hover:opacity-70">
               <img 
-                src="/images/quick-launch-wave.png" 
+                src="/images/quick-launch-wave-2.png" 
                 alt="Wave" 
                 className="w-full h-full object-cover object-right mix-blend-screen" 
                 draggable={false}
@@ -163,6 +163,9 @@ export default function HomeApp({ window }: HomeAppProps) {
               />
             </div>
             
+            {/* Subtle Theme Effect */}
+            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-yellow-500/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-yellow-500/15 transition-all duration-500"></div>
+
             {/* Card inner top highlight */}
             <div className="absolute inset-0 rounded-[28px] border border-white/[0.06] pointer-events-none" style={{ maskImage: 'linear-gradient(to bottom, black 0%, transparent 40%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 40%)' }}></div>
 
@@ -201,6 +204,9 @@ export default function HomeApp({ window }: HomeAppProps) {
                 style={{ maskImage: 'linear-gradient(to right, transparent 10%, black 80%)', WebkitMaskImage: 'linear-gradient(to right, transparent 10%, black 80%)' }}
               />
             </div>
+            
+            {/* Subtle Theme Effect */}
+            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-yellow-500/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-yellow-500/15 transition-all duration-500"></div>
             
             {/* Card inner top highlight */}
             <div className="absolute inset-0 rounded-[28px] border border-white/[0.06] pointer-events-none" style={{ maskImage: 'linear-gradient(to bottom, black 0%, transparent 40%)', WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 40%)' }}></div>

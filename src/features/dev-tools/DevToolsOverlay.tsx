@@ -19,10 +19,11 @@ interface DevSection {
 interface DevField {
   key: string;
   label: string;
-  type: 'number' | 'color' | 'boolean' | 'range';
+  type: 'number' | 'color' | 'boolean' | 'range' | 'button';
   min?: number;
   max?: number;
   step?: number;
+  buttonLabel?: string;
   getValue: () => number | string | boolean;
   setValue: (v: any) => void;
 }
@@ -154,6 +155,40 @@ export function DevToolsOverlay() {
         }
       ]
     },
+    {
+      id: 'aiTesting',
+      label: 'AI Integrations',
+      target: 'aiTesting',
+      icon: '✨',
+      fields: [
+        {
+          key: 'testAiConnection', 
+          label: 'Test AI Connection', 
+          type: 'button',
+          buttonLabel: 'Ping',
+          getValue: () => false,
+          setValue: async () => {
+            console.log('Test AI connected: Sending ping to AI configuration endpoint...');
+            try {
+              const res = await fetch('/api/ai/test', {
+                method: 'POST',
+              });
+              const data = await res.json();
+              if (!data.ok) {
+                console.error('AI Test Failed:', JSON.stringify(data, null, 2));
+                alert(`AI Test Failed: ${data.message} (${data.code})`);
+              } else {
+                console.log('AI Test Success!', data);
+                alert(`AI Test Success!\nProvider: ${data.provider}\nModel: ${data.model}\nResponse: ${data.content}`);
+              }
+            } catch (err) {
+              console.error('AI Test Error:', err);
+              alert('AI Test Error: See console.');
+            }
+          },
+        }
+      ]
+    }
   ];
 
   // Filter sections if a specific target is inspected
@@ -563,6 +598,20 @@ function FieldRow({ field }: { field: DevField }) {
           <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
             value ? 'translate-x-5' : 'translate-x-0.5'
           }`} />
+        </button>
+      </div>
+    );
+  }
+
+  if (field.type === 'button') {
+    return (
+      <div className="flex items-center justify-between mt-2">
+        <label className="text-[11px] text-white/50">{field.label}</label>
+        <button
+          onClick={() => field.setValue(true)}
+          className="bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded transition-colors"
+        >
+          {field.buttonLabel || 'Run'}
         </button>
       </div>
     );

@@ -30,12 +30,10 @@ export function NativeAppShell({ sidebar, toolbar, content, appId, onLogoClick, 
           <div className="px-6 pt-5 pb-2 flex flex-col gap-6 shrink-0 relative z-10">
              {/* Window Controls or Back Button */}
              {onBackClick && (
-               <div className="flex items-center gap-2 h-6 mb-2">
-                 <button onClick={onBackClick} className="flex items-center gap-1.5 text-white/50 hover:text-white transition-colors group">
-                   <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors border border-white/5">
-                     <ChevronLeft className="w-3.5 h-3.5" />
-                   </div>
-                   <span className="text-[10px] font-bold tracking-widest uppercase">Back</span>
+               <div className="flex items-center h-12 mb-2">
+                 <button onClick={onBackClick} className="native-back-button">
+                   <ChevronLeft className="icon" />
+                   <span className="text">Back</span>
                  </button>
                </div>
              )}
@@ -81,39 +79,6 @@ export function NativeAppShell({ sidebar, toolbar, content, appId, onLogoClick, 
       {/* Main Content Area - Light Theme */}
       <div className={`flex-1 flex flex-col min-w-0 bg-[#FAFAFA] relative transition-opacity duration-300 ${sidebar ? 'rounded-tl-[24px] rounded-bl-[24px] border-l border-white/10 shadow-[-10px_0_30px_rgba(0,0,0,0.5)] z-40' : ''} ${isActive ? 'opacity-100' : 'opacity-50'}`}>
         
-        {/* Toolbar / Header */}
-        <div className="h-20 flex-shrink-0 bg-transparent flex items-center px-8 justify-between relative z-20">
-          <div className="flex items-center gap-4 flex-1">
-             {/* Hamburger Menu Icon Removed */}
-             {toolbar}
-          </div>
-          
-          {/* Universal Native Actions */}
-          <div className="flex items-center gap-4">
-            {/* Search Bar */}
-            <div className="relative hidden md:flex items-center w-64 h-10 bg-gray-100/80 rounded-full px-4 border border-gray-200 focus-within:bg-white focus-within:border-yellow-400 transition-colors shadow-sm">
-              <Search className="w-4 h-4 text-gray-400 mr-2" />
-              <input 
-                type="text" 
-                placeholder="Search anything..." 
-                className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 w-full placeholder:text-gray-400"
-              />
-            </div>
-
-            <button className="w-10 h-10 bg-white border border-gray-100 shadow-sm rounded-xl flex items-center justify-center text-gray-700 hover:text-black transition-colors relative">
-              <Bell className="w-[18px] h-[18px]" />
-              <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-yellow-500 border-2 border-white" />
-            </button>
-            <button className="h-10 bg-white border border-gray-100 shadow-sm rounded-xl flex items-center justify-center px-3 gap-2 text-gray-700 hover:text-black transition-colors">
-              <div className="w-6 h-6 rounded bg-black flex items-center justify-center overflow-hidden">
-                 <div className="w-3 h-3 border border-yellow-500 rotate-45 transform origin-center flex items-center justify-center">
-                    <div className="w-1 h-1 bg-white rounded-full"></div>
-                 </div>
-              </div>
-              <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-            </button>
-          </div>
-        </div>
 
         {/* Scrollable Content Container */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden light-scrollbar relative z-10">
@@ -132,6 +97,73 @@ export function NativeAppShell({ sidebar, toolbar, content, appId, onLogoClick, 
         .light-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .light-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
         .light-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
+
+        /* Uiverse Proud Goat 69 Effect - Adapted for Back Button */
+        .native-back-button {
+          overflow: hidden;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          font-family: inherit;
+          letter-spacing: 1.5px;
+          padding: 0 12px;
+          text-align: center;
+          width: 130px;
+          height: 44px;
+          font-size: 14px;
+          text-transform: uppercase;
+          font-weight: 600;
+          border-radius: 8px;
+          outline: none;
+          user-select: none;
+          cursor: pointer;
+          transform: translateY(0px);
+          position: relative;
+          box-shadow:
+            inset 0 30px 30px -15px rgba(255, 255, 255, 0.05),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 1px 20px rgba(0, 0, 0, 0),
+            0 3px 0 rgba(255, 255, 255, 0.15),
+            0 3px 2px rgba(0, 0, 0, 0.2),
+            0 5px 10px rgba(0, 0, 0, 0.3),
+            0 10px 20px rgba(0, 0, 0, 0.3);
+          background: #1C1C1F;
+          color: white;
+          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+          transition: 150ms all ease-in-out;
+        }
+
+        .native-back-button .icon {
+          margin-right: 8px;
+          width: 20px;
+          height: 20px;
+          transition: all 0.5s ease-in-out;
+        }
+
+        .native-back-button:active {
+          transform: translateY(3px);
+          box-shadow:
+            inset 0 16px 2px -15px rgba(0, 0, 0, 0),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 20px rgba(0, 0, 0, 0.1),
+            0 0 0 rgba(255, 255, 255, 0.15),
+            0 0 0 2px rgba(255, 255, 255, 0.1),
+            0 0 0 rgba(0, 0, 0, 0),
+            0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        .native-back-button:hover .text {
+          transform: translateX(80px);
+        }
+        
+        .native-back-button:hover .icon {
+          transform: translate(25px);
+        }
+
+        .native-back-button .text {
+          transition: all 0.5s ease-in-out;
+        }
       `}</style>
     </div>
   );

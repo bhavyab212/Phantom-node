@@ -4,23 +4,24 @@ import { GlassPanel } from '@/features/native-app-shell';
 import { NativeFormField } from './NativeFormField';
 import { SubmitDial, SubmitState } from './SubmitDial';
 import { ResponsePromiseCard } from './ResponsePromiseCard';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ArrowLeft } from 'lucide-react';
+import { useContactFormStore } from '../useContactFormStore';
+import { getQuestionById } from '../lib/routing-engine';
 
 export interface InquiryFormPanelProps {
   className?: string;
 }
 
 export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className }) => {
+  const { 
+    name, email, company, message, website, phone,
+    setField, isSubmitting, setSubmitting,
+    sourceType, sourceId, sourceTitle,
+    answers, answeredQuestionIds, prevStep
+  } = useContactFormStore();
+  
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
-  
-  // Form State
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
-  const [problem, setProblem] = useState('');
-  
-  // Errors
-  const [errors, setErrors] = useState<{name?: string; email?: string; company?: string; problem?: string}>({});
+  const [errors, setErrors] = useState<{name?: string; email?: string; company?: string; message?: string}>({});
 
   const validate = () => {
     const newErrors: typeof errors = {};
@@ -31,30 +32,65 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
       newErrors.email = 'Valid email required';
     }
     if (!company.trim()) newErrors.company = 'Required';
-    if (!problem.trim()) newErrors.problem = 'Required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const generateSummary = () => {
+    const parts: string[] = [];
+    if (sourceTitle) {
+      parts.push(`${sourceTitle} enquiry.`);
+    } else {
+      parts.push(`General enquiry.`);
+    }
+    const answerValues = answeredQuestionIds.map(id => answers[id]).filter(Boolean);
+    if (answerValues.length > 0) {
+      parts.push(`Key context: ${answerValues.join(', ')}.`);
+    }
+    return parts.join(' ');
   };
 
   const handleSubmit = () => {
     if (!validate()) return;
     
     setSubmitState('sending');
+    setSubmitting(true);
+    
+    const payload = {
+      contactDetails: { name, email, phone, company, website, message },
+      qualification: { 
+        sourceType, 
+        sourceId, 
+        sourceTitle,
+        answers: answeredQuestionIds.map(id => ({
+          questionId: id,
+          prompt: getQuestionById(id)?.text || id,
+          answer: answers[id]
+        })),
+        summary: generateSummary()
+      }
+    };
+    
+    // In a real app, this is where we'd send the payload to an API:
+    console.log('Submitting payload:', payload);
     
     // Simulate async submission
     setTimeout(() => {
       setSubmitState('success');
+      setSubmitting(false);
     }, 1500);
+  };
+
+  const getMessagePlaceholder = () => {
+    if (sourceType === 'automation') return "Anything specific you want changed, adapted, or added to this automation?";
+    if (sourceType === 'service') return "Anything about your current setup, workflow, or goals we should understand?";
+    return "Anything else about the workflow, bottleneck, or system you want us to know?";
   };
 
   return (
     <div className={cn("w-full max-w-2xl mx-auto flex flex-col gap-8 relative", className)}>
       
-      {/* 
-        We use a wrapper to keep the form and success state in the same physical space 
-        and crossfade between them.
-      */}
       <GlassPanel elevation="high" tint="light" className="p-8 md:p-12 relative overflow-hidden min-h-[500px]">
         
         {/* State 1: The Form */}
@@ -64,13 +100,50 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
             submitState === 'success' ? "opacity-0 pointer-events-none scale-95 absolute" : "opacity-100 scale-100 relative"
           )}
         >
+          <div className="flex items-center justify-between mb-2">
+            <button 
+              onClick={prevStep}
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 font-medium transition-colors text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back
+            </button>
+          </div>
+          
           <div>
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
               Let's talk systems.
             </h2>
             <p className="text-gray-600 text-sm font-medium">
-              Tell us what's slowing you down. We'll tell you how to fix it.
+              We have everything we need to start. Where should we reach you?
             </p>
+          </div>
+
+          {/* Qualification Summary Block */}
+          <div className="bg-gray-50 border border-gray-100 rounded-xl p-6 mt-2 shadow-inner">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+              What you're looking for
+            </h3>
+            {sourceTitle && (
+              <div className="mb-4 pb-4 border-b border-gray-200">
+                <span className="inline-block bg-yellow-100 text-yellow-800 text-[11px] font-bold px-2 py-0.5 rounded uppercase tracking-wider mb-1">
+                  {sourceType === 'automation' ? 'Automation' : 'Service'}
+                </span>
+                <p className="font-semibold text-gray-900">{sourceTitle}</p>
+              </div>
+            )}
+            <ul className="space-y-3">
+              {answeredQuestionIds.map((id) => {
+                const question = getQuestionById(id);
+                const answer = answers[id];
+                if (!question || !answer) return null;
+                return (
+                  <li key={id} className="text-sm">
+                    <span className="block text-gray-500 mb-0.5">{question.text}</span>
+                    <span className="font-semibold text-gray-900">{answer}</span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -78,7 +151,7 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
               label="Full Name" 
               placeholder="Jane Doe"
               value={name}
-              onChange={(e) => {setName(e.target.value); setErrors(prev => ({...prev, name: undefined}))}}
+              onChange={(e) => {setField('name', e.target.value); setErrors(prev => ({...prev, name: undefined}))}}
               error={errors.name}
             />
             <NativeFormField 
@@ -86,29 +159,44 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
               placeholder="jane@company.com"
               type="email"
               value={email}
-              onChange={(e) => {setEmail(e.target.value); setErrors(prev => ({...prev, email: undefined}))}}
+              onChange={(e) => {setField('email', e.target.value); setErrors(prev => ({...prev, email: undefined}))}}
               error={errors.email}
             />
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <NativeFormField 
+              label="Company Name" 
+              placeholder="Apex Innovations"
+              value={company}
+              onChange={(e) => {setField('company', e.target.value); setErrors(prev => ({...prev, company: undefined}))}}
+              error={errors.company}
+            />
+            <NativeFormField 
+              label="Website" 
+              placeholder="apex.com"
+              value={website}
+              onChange={(e) => {setField('website', e.target.value)}}
+            />
+          </div>
+          
           <NativeFormField 
-            label="Company Name" 
-            placeholder="Apex Innovations"
-            value={company}
-            onChange={(e) => {setCompany(e.target.value); setErrors(prev => ({...prev, company: undefined}))}}
-            error={errors.company}
+            label="Phone/WhatsApp (Optional)" 
+            placeholder="+1 234 567 8900"
+            value={phone}
+            onChange={(e) => {setField('phone', e.target.value)}}
           />
 
           <NativeFormField 
-            label="What takes too much manual work today?" 
-            placeholder="We spend hours moving data from Stripe to Salesforce every week..."
+            label="What should we know before we reply?" 
+            placeholder={getMessagePlaceholder()}
             isTextarea
-            value={problem}
-            onChange={(e) => {setProblem(e.target.value); setErrors(prev => ({...prev, problem: undefined}))}}
-            error={errors.problem}
+            value={message}
+            onChange={(e) => {setField('message', e.target.value); setErrors(prev => ({...prev, message: undefined}))}}
+            error={errors.message}
           />
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mt-8 pt-6 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-6 mt-8 pt-6 border-t border-gray-200">
             <SubmitDial status={submitState} onClick={handleSubmit} />
           </div>
         </div>
@@ -127,7 +215,7 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
             Inquiry Received
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed max-w-sm">
-            Thank you, {name.split(' ')[0] || 'there'}. We are reviewing your systems friction and will respond to <span className="font-semibold text-gray-900">{email}</span> within one business day.
+            Thank you, {name.split(' ')[0] || 'there'}. We have your workflow details and will reach out to <span className="font-semibold text-gray-900">{email}</span> shortly.
           </p>
         </div>
 
