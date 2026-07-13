@@ -4,6 +4,7 @@ import { Workflow, CheckCircle2, ArrowRight } from 'lucide-react';
 import { AUTOMATION_PROJECTS, AutomationEntry } from './automation-data';
 import { AutomationMark } from './components/AutomationMark';
 import { AutomationDetail } from './components/AutomationDetail';
+import { TrackVisibility } from '../../../components/analytics/TrackVisibility';
 
 // Manual source folder for verified automation assets. Do not display or
 // import files automatically without an approved integration.
@@ -16,6 +17,20 @@ interface AutomationsAppProps {
 export default function AutomationsApp({ window: windowInstance }: AutomationsAppProps) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedAutomation, setSelectedAutomation] = useState<AutomationEntry | null>(null);
+
+  const handleCategoryChange = (cat: string) => {
+    import('../../../lib/analytics').then(({ trackAutomationFilterChanged }) => {
+      if (activeCategory !== cat) trackAutomationFilterChanged(cat, activeCategory);
+    });
+    setActiveCategory(cat);
+  };
+
+  const handleAutomationSelect = (entry: AutomationEntry) => {
+    import('../../../lib/analytics').then(({ trackAutomationDetailOpened }) => {
+      trackAutomationDetailOpened(entry.id, entry.title, entry.category, 'automation_gallery');
+    });
+    setSelectedAutomation(entry);
+  };
 
   const publishedEntries = AUTOMATION_PROJECTS.filter(e => e.isPublished);
   
@@ -66,7 +81,7 @@ export default function AutomationsApp({ window: windowInstance }: AutomationsAp
               {categories.map(cat => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                   className={`px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all ${
                     activeCategory === cat 
                       ? 'bg-[#111111] text-white shadow-md' 
@@ -106,8 +121,9 @@ export default function AutomationsApp({ window: windowInstance }: AutomationsAp
           <div className="w-full max-w-6xl mx-auto space-y-6">
             {/* Featured Card */}
             {displayedEntries.length > 0 && (
+              <TrackVisibility componentName="automation_featured_card" studioView="automations" componentPosition={0} sourceId={displayedEntries[0].id}>
               <button 
-                onClick={() => setSelectedAutomation(displayedEntries[0])}
+                onClick={() => handleAutomationSelect(displayedEntries[0])}
                 className="w-full text-left group bg-white border border-gray-100 rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-[1.04] hover:-translate-y-3 hover:z-20 magic-card"
               >
                 {/* Wrap the content in a relative z-10 element to sit above the magic glow, with inherit border-radius to prevent visual leakage */}
@@ -144,14 +160,15 @@ export default function AutomationsApp({ window: windowInstance }: AutomationsAp
                   </div>
                 </div>
               </button>
+              </TrackVisibility>
             )}
 
             {/* Grid for remaining entries */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedEntries.slice(1).map(entry => (
+              {displayedEntries.slice(1).map((entry, idx) => (
+                <TrackVisibility key={entry.id} componentName="automation_card" studioView="automations" componentPosition={idx + 1} sourceId={entry.id}>
                 <button 
-                  key={entry.id}
-                  onClick={() => setSelectedAutomation(entry)}
+                  onClick={() => handleAutomationSelect(entry)}
                   className="w-full text-left group bg-white border border-gray-100 rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-[1.05] hover:-translate-y-4 hover:z-20 flex flex-col magic-card"
                 >
                   <div className="flex flex-col relative z-10 bg-white rounded-[inherit] overflow-hidden w-full h-full">
@@ -194,6 +211,7 @@ export default function AutomationsApp({ window: windowInstance }: AutomationsAp
                   </div>
                   </div>
                 </button>
+                </TrackVisibility>
               ))}
             </div>
 

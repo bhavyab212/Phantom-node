@@ -65,6 +65,12 @@ export default function CommandPalette() {
     const item = results[index];
     if (!item) return;
 
+    if (query.trim()) {
+      import('../../lib/analytics').then(({ trackStudioSearchPerformed }) => {
+        trackStudioSearchPerformed(query.length, results.length, item.type, item.id);
+      });
+    }
+
     if (item.type === 'action') {
       // It's a palette command
       (item as any).action();

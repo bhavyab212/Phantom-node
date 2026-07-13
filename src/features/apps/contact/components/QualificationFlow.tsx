@@ -21,9 +21,28 @@ export const QualificationFlow: React.FC = () => {
   const question = currentQuestionId ? getQuestionById(currentQuestionId) : null;
   const currentAnswer = currentQuestionId ? answers[currentQuestionId] : undefined;
   
-  // The dimension is embedded in the ID now, e.g. dim-what-they-want
   const currentDimension = question?.dimension;
   const { record: helpRecord } = useQuestionHelp(currentDimension || currentQuestionId);
+  
+  // Track flow start and question shown
+  useEffect(() => {
+    import('../../../../lib/analytics').then(({ trackContactFlowStarted, trackContactQuestionShown }) => {
+      // Flow started
+      if (history.length === 0 && answeredQuestionIds.length === 0) {
+        trackContactFlowStarted(sourceType, sourceId || undefined, sourceTitle || undefined);
+      }
+      // Question shown
+      if (question) {
+        trackContactQuestionShown(
+          answeredQuestionIds.length + 1,
+          sourceType,
+          !!question.options?.length,
+          'generated', // We don't track generated vs fallback perfectly here, default to generated
+          sourceId || undefined
+        );
+      }
+    });
+  }, [history.length, answeredQuestionIds.length, sourceType, sourceId, sourceTitle, question?.id, question?.text]);
   
   // Reset custom input when question changes
   useEffect(() => {
@@ -112,8 +131,17 @@ export const QualificationFlow: React.FC = () => {
   };
 
   const determineNextNode = async (answerValue: string, isCustom: boolean) => {
-    if (!currentQuestionId) return;
+    if (!currentQuestionId || !question) return;
     
+    import('../../../../lib/analytics').then(({ trackContactQuestionAnswered }) => {
+      trackContactQuestionAnswered(
+        answeredQuestionIds.length + 1,
+        sourceType,
+        isCustom ? 'custom_typed' : 'predefined_option',
+        sourceId || undefined
+      );
+    });
+
     setLoadingNext(true);
     setAnswer(currentQuestionId, answerValue, isCustom);
     

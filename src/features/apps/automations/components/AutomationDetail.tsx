@@ -23,6 +23,9 @@ export function AutomationDetail({ automation, onBack, windowInstance }: Automat
   };
 
   const handleDiscuss = () => {
+    import('../../../../lib/analytics').then(({ trackAutomationContactRequested }) => {
+      trackAutomationContactRequested(automation.id, automation.title, automation.category, 'automation_detail_header');
+    });
     openApp('contact', 'Contact', {}, { sourceType: 'automation', sourceId: automation.id, sourceTitle: automation.title });
   };
 

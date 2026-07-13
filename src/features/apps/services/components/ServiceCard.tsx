@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock, Banknote } from 'lucide-react';
 import { Service } from '../services-data';
+import { TrackVisibility } from '../../../../../components/analytics/TrackVisibility';
 
 interface ServiceCardProps {
   service: Service;
@@ -10,6 +11,7 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ service, onClick, index }: ServiceCardProps) {
   return (
+    <TrackVisibility componentName="service_card" studioView="services" componentPosition={index} sourceId={service.id}>
     <motion.button
       type="button"
       onClick={onClick}
@@ -66,5 +68,6 @@ export default function ServiceCard({ service, onClick, index }: ServiceCardProp
         </div>
       </div>
     </motion.button>
+    </TrackVisibility>
   );
 }

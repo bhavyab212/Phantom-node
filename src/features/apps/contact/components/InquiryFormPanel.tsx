@@ -77,6 +77,16 @@ export const InquiryFormPanel: React.FC<InquiryFormPanelProps> = ({ className })
     
     // Simulate async submission
     setTimeout(() => {
+      import('../../../../lib/analytics').then(({ trackContactBriefSubmitted }) => {
+        trackContactBriefSubmitted(
+          sourceType,
+          answeredQuestionIds.length,
+          !!website.trim(),
+          !!phone.trim(),
+          'success',
+          sourceId || undefined
+        );
+      });
       setSubmitState('success');
       setSubmitting(false);
     }, 1500);

@@ -26,7 +26,13 @@ export default function StudioApp({ window: windowInstance }: StudioAppProps) {
     }
   }, [windowInstance.targetContext?.view]);
 
-  const setTab = (tabId: string) => {
+  const setTab = (tabId: string, navigationSource: 'sidebar' | 'quick_launch' | 'internal_cta' | 'deep_link' = 'sidebar') => {
+    import('../../../lib/analytics').then(({ trackStudioViewChanged, trackStudioNavigationClicked }) => {
+      if (activeTab !== tabId) {
+        trackStudioNavigationClicked(tabId, navigationSource);
+        trackStudioViewChanged(tabId, activeTab, navigationSource);
+      }
+    });
     setActiveTab(tabId);
   };
 
@@ -320,7 +326,10 @@ export default function StudioApp({ window: windowInstance }: StudioAppProps) {
         {/* Lower Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mb-6">
           {/* Work Card */}
-          <SpotlightCard spotlightColor="rgba(250, 204, 21, 0.15)" onClick={() => setTab('work')} className="h-[220px] group flex flex-col items-start bg-[#111111] p-8 rounded-[24px] hover:bg-black transition-all shadow-xl border border-white/[0.04]">
+          <SpotlightCard spotlightColor="rgba(250, 204, 21, 0.15)" onClick={() => {
+            import('../../../lib/analytics').then(({ trackQuickLaunchClicked }) => trackQuickLaunchClicked('explore_work', 'work'));
+            setTab('work', 'quick_launch');
+          }} className="h-[220px] group flex flex-col items-start bg-[#111111] p-8 rounded-[24px] hover:bg-black transition-all shadow-xl border border-white/[0.04]">
             {/* Wave image background */}
             <div className="absolute inset-0 z-0 opacity-40 transition-opacity group-hover:opacity-60">
               <img 
@@ -351,7 +360,10 @@ export default function StudioApp({ window: windowInstance }: StudioAppProps) {
           </SpotlightCard>
 
           {/* Services Card */}
-          <SpotlightCard spotlightColor="rgba(250, 204, 21, 0.15)" onClick={() => setTab('services')} className="h-[220px] group flex flex-col items-start bg-[#111111] p-8 rounded-[24px] hover:bg-black transition-all shadow-xl border border-white/[0.04]">
+          <SpotlightCard spotlightColor="rgba(250, 204, 21, 0.15)" onClick={() => {
+            import('../../../lib/analytics').then(({ trackQuickLaunchClicked }) => trackQuickLaunchClicked('core_services', 'services'));
+            setTab('services', 'quick_launch');
+          }} className="h-[220px] group flex flex-col items-start bg-[#111111] p-8 rounded-[24px] hover:bg-black transition-all shadow-xl border border-white/[0.04]">
             {/* Wave image background */}
             <div className="absolute inset-0 z-0 opacity-40 transition-opacity group-hover:opacity-60">
               <img 

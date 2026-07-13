@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Clock, Banknote, Users } from 'lucide-react';
 import { Service } from '../services-data';
@@ -14,7 +15,17 @@ export default function ServiceDetailView({ service, onBack }: ServiceDetailView
   const { windows, openApp, focusWindow, restoreWindow } = useWindowStore();
   const answeredQuestionIds = useContactFormStore(s => s.answeredQuestionIds);
 
+  useEffect(() => {
+    import('../../../../lib/analytics').then(({ trackServiceDetailOpened }) => {
+      trackServiceDetailOpened(service.id, service.title, 'services_grid');
+    });
+  }, [service.id, service.title]);
+
   const handleGetQuote = () => {
+    import('../../../../lib/analytics').then(({ trackServiceContactRequested }) => {
+      trackServiceContactRequested(service.id, service.title, 'service_detail_sticky_bar');
+    });
+    
     const contactEntry = APP_REGISTRY['contact'];
     if (!contactEntry) return;
 

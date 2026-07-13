@@ -12,6 +12,9 @@ export default function CaseStudyHero({ project, onOpenArchive }: CaseStudyHeroP
   const { executeAction } = useGlobalContentIndex();
 
   const handleStartProject = () => {
+    import('../../../../lib/analytics').then(({ trackWorkContactRequested }) => {
+      trackWorkContactRequested(project.id, project.clientName, project.category);
+    });
     executeAction({ 
       id: 'idx-act-start', 
       type: 'action', 

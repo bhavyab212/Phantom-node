@@ -20,7 +20,13 @@ export function useWorkNavigation(initialProjectId?: string | null) {
   const [history, setHistory] = useState<WorkNavigationState[]>([state]);
 
   const openProject = useCallback((id: string) => {
-    if (!WORK_PROJECTS.some(p => p.id === id)) return;
+    const project = WORK_PROJECTS.find(p => p.id === id);
+    if (!project) return;
+    
+    import('../../../lib/analytics').then(({ trackCaseStudyOpened }) => {
+      trackCaseStudyOpened(project.id, project.clientName, project.category, 'work_index');
+    });
+
     const newState: WorkNavigationState = { view: 'case-study', activeProjectId: id };
     setState(newState);
     setHistory(prev => [...prev, newState]);
