@@ -73,7 +73,7 @@ export const QualificationFlow: React.FC = () => {
       };
       
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1500);
+      const timeoutId = window.setTimeout(() => controller.abort(), 1500);
       
       const res = await fetch('/api/contact/generate-question', {
         method: 'POST',
@@ -82,7 +82,7 @@ export const QualificationFlow: React.FC = () => {
         signal: controller.signal
       });
       
-      clearTimeout(timeoutId);
+      window.clearTimeout(timeoutId);
       
       if (res.ok) {
         const data = await res.json();
